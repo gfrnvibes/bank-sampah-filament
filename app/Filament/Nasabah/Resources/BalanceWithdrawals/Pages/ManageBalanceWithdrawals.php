@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Filament\Nasabah\Resources\BalanceWithdrawals\Pages;
+
+use App\Filament\Nasabah\Resources\BalanceWithdrawals\BalanceWithdrawalResource;
+use Filament\Actions\CreateAction;
+use Filament\Resources\Pages\ManageRecords;
+
+class ManageBalanceWithdrawals extends ManageRecords
+{
+    protected static string $resource = BalanceWithdrawalResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            CreateAction::make(),
+        ];
+    }
+}
