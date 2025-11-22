@@ -20,31 +20,38 @@ class UserForm
                     ->schema([
                         Grid::make(2)->schema([
                             TextInput::make('name')
+                                ->label('Nama')
                                 ->required(),
                             TextInput::make('age')
+                                ->label('Usia')
                                 ->numeric()
                                 ->rule('integer'),
                         ]),
                         TextInput::make('nik')
-                            ->required()
-                            ->numeric()
-                            ->rule('digits:16')
-                            ->maxLength(16),
+                                ->label('NIK')
+                                ->required()
+                                ->numeric()
+                                ->rule('digits:16')
+                                ->maxLength(16),
 
                         TextInput::make('phone')
-                            ->tel()
-                            ->numeric()
-                            ->rule('integer')
-                            ->minLength(10)
-                            ->maxLength(13),
+                                ->label('No. Telepon')
+                                ->tel()
+                                ->numeric()
+                                ->rule('integer')
+                                ->minLength(10)
+                                ->maxLength(13),
 
                         // Dusun + RT + RW dalam 1 baris
                         Grid::make(3)->schema([
-                            TextInput::make('dusun'),
+                            TextInput::make('dusun')
+                                ->label('Dusun'),
                             TextInput::make('rt')
+                                ->label('RT')
                                 ->numeric()
                                 ->maxLength(3),
                             TextInput::make('rw')
+                                ->label('RW')
                                 ->numeric()
                                 ->maxLength(3),
                         ]),
@@ -57,7 +64,7 @@ class UserForm
                 Section::make('Akun')
                     ->schema([
                         TextInput::make('email')
-                            ->label('Email address')
+                            ->label('Email')
                             ->email()
                             ->required(),
 
@@ -71,11 +78,13 @@ class UserForm
                             ->required(fn($record) => $record === null),
 
                         Toggle::make('is_active')
-                            ->required(),
+                                ->label('Status Akun')
+                                ->required(),
 
                         FileUpload::make('avatar')
                             ->image() // WAJIB untuk preview
                             ->directory('avatars')
+                            ->label('Foto Profil')
                             ->visibility('public')
 
                     ]),

@@ -15,7 +15,12 @@ class EditWasteDeposit extends EditRecord
     {
         return [
             ViewAction::make(),
-            DeleteAction::make(),
+            // DeleteAction::make(),
         ];
+    }
+
+    public function getHeading(): string
+    {
+        return 'Edit Setoran Sampah';
     }
 }

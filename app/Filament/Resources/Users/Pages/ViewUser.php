@@ -16,4 +16,9 @@ class ViewUser extends ViewRecord
             EditAction::make(),
         ];
     }
+
+    public function getTitle(): string
+    {
+        return 'Detail Nasabah';
+    }
 }

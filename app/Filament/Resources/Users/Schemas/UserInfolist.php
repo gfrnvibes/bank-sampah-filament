@@ -18,41 +18,52 @@ class UserInfolist
                 Section::make('Identitas Diri')
                     ->schema([
                         Grid::make(3)->schema([
-                            TextEntry::make('name'),
-                            TextEntry::make('age'),
+                            TextEntry::make('name')
+                                ->label('Nama'),
+                            TextEntry::make('age')
+                                ->label('Usia'),
                             TextEntry::make('balance')
+                                ->label('Saldo')
                                 ->badge()
                                 ->size('xl')
                                 ->color('success')
                                 ->money('IDR', decimalPlaces: 0, locale: 'id_ID'),
                         ]),
                         Grid::make(2)->schema([
-                            TextEntry::make('nik'),
-                            TextEntry::make('phone'),
+                            TextEntry::make('nik')
+                                ->label('NIK'),
+                            TextEntry::make('phone')
+                                ->label('No. Telepon'),
                         ]),
                         Grid::make(3)->schema([
-                            TextEntry::make('dusun'),
-                            TextEntry::make('rt'),
-                            TextEntry::make('rw'),
+                            TextEntry::make('dusun')
+                                ->label('Dusun'),
+                            TextEntry::make('rt')
+                                ->label('RT'),
+                            TextEntry::make('rw')
+                                ->label('RW'),
                         ]),
                     ]),
-
 
                 Section::make('Akun')
                     ->schema([
                          Grid::make(2)->schema([
                              TextEntry::make('email')
-                                 ->label('Email address'),
+                                 ->label('Email'),
      
                              IconEntry::make('is_active')
+                                ->label('Status Akun')
                                  ->boolean(),
                          ]),
-                        ImageEntry::make('avatar'),
+                        ImageEntry::make('avatar')
+                                ->label('Foto Profil'),
                         Grid::make(2)->schema([
                             TextEntry::make('created_at')
+                                ->label('Dibuat pada')
                                 ->dateTime(),
                             TextEntry::make('updated_at')
-                                ->dateTime()
+                                ->label('Diperbarui pada')
+                                ->dateTime(),
                         ]),
                     ]),
                     ]);

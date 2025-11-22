@@ -15,7 +15,7 @@ class StatsOverview extends StatsOverviewWidget
         $userId = auth()->user()?->id;
 
         return [
-            Stat::make('Pendapatan (Rp)',
+            Stat::make('Saldo (Rp)',
                 User::where('id', $userId)
                     ->sum('balance')
             ),

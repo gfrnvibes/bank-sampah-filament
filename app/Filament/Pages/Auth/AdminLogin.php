@@ -25,7 +25,7 @@ class AdminLogin extends Login
     protected function getLoginFormComponent(): Component
     {
         return TextInput::make('login')
-            ->label(__('Nama Pengguna / Email'))
+            ->label(__('Username / Email'))
             ->required()
             ->autocomplete()
             ->autofocus()

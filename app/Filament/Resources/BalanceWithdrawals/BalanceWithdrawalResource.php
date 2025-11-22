@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\BalanceWithdrawals;
 
 use BackedEnum;
+use UnitEnum;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
 use Filament\Schemas\Schema;
@@ -28,15 +29,20 @@ use App\Filament\Resources\BalanceWithdrawals\Pages\ManageBalanceWithdrawals;
 class BalanceWithdrawalResource extends Resource
 {
     protected static ?string $model = BalanceWithdrawal::class;
-
     protected static ?int $navigationSort = 2;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyDollar;
+    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::CurrencyDollar;
+    protected static ?string $navigationLabel = 'Penarikan Saldo';
+    protected static ?string $slug = 'penarikan-saldo';
+    protected static ?string $pluralModelLabel = 'Penarikan Saldo';
+    protected static string|UnitEnum|null $navigationGroup = 'Transaksi';
 
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::where('status', 'pending')->count();
     }
+
+    
 
     public static function form(Schema $schema): Schema
     {
@@ -44,10 +50,12 @@ class BalanceWithdrawalResource extends Resource
             ->components([
                 Select::make('user_id')
                     ->relationship('user', 'name')
+                    ->label('Pilih Nasabah')
                     ->required()
                     ->searchable()
                     ->native(false),
                 TextInput::make('amount')
+                    ->label('Jumlah Penarikan')
                     ->required()
                     ->numeric(),
                 Select::make('status')
@@ -58,20 +66,47 @@ class BalanceWithdrawalResource extends Resource
             ])->columns(1);
     }
 
+    
     public static function infolist(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextEntry::make('user_id')
+                TextEntry::make('user.name')
+                    ->label('Nasabah')
                     ->numeric(),
                 TextEntry::make('amount')
-                    ->numeric(),
-                TextEntry::make('status'),
+                    ->label('Jumlah Penarikan')
+                    ->badge()
+                    ->size('xl')
+                    ->color('primary')
+                    ->money('IDR', decimalPlaces: 0, locale: 'id_ID'),
+                TextEntry::make('status')
+                    ->badge()
+                    ->size('xl')
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'pending' => 'Menunggu',
+                        'accepted' => 'Selesai',
+                        'rejected' => 'Ditolak',
+                        default => ucfirst($state),
+                    })
+                    ->color(fn(string $state): string => match ($state) {
+                        'pending' => 'gray',
+                        'accepted' => 'success',
+                        'rejected' => 'danger',
+                    })
+                    ->icon(fn(string $state): ?string => match ($state) {
+                        'pending' => 'heroicon-o-clock',
+                        'accepted' => 'heroicon-o-check-circle',
+                        'rejected' => 'heroicon-o-x-circle',
+                        default => null,
+                    }),
                 TextEntry::make('created_at')
+                    ->label('Dibuat Pada')
                     ->dateTime(),
-                TextEntry::make('updated_at')
-                    ->dateTime(),
-            ]);
+                // TextEntry::make('updated_at')
+                //     ->label('Diperbarui Pada')
+                //     ->dateTime(),
+            ])->columns(2);
     }
 
     public static function table(Table $table): Table
@@ -79,6 +114,7 @@ class BalanceWithdrawalResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('created_at')
+                    ->label('Tanggal')
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('user.name')
@@ -86,6 +122,7 @@ class BalanceWithdrawalResource extends Resource
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('amount')
+                    ->label('Jumlah Penarikan')
                     ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
                     ->badge()
                     ->size('xl')
@@ -93,6 +130,7 @@ class BalanceWithdrawalResource extends Resource
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge()
+                    ->size('xl')
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'pending' => 'Menunggu',
                         'accepted' => 'Selesai',

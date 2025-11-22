@@ -11,6 +11,7 @@ use App\Filament\Resources\WasteDeposits\Schemas\WasteDepositInfolist;
 use App\Filament\Resources\WasteDeposits\Tables\WasteDepositsTable;
 use App\Models\WasteDeposit;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -20,9 +21,19 @@ class WasteDepositResource extends Resource
 {
     protected static ?string $model = WasteDeposit::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTruck;
+
+    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Truck;
+
+    protected static ?string $navigationLabel = 'Setor Sampah';
+
+    protected static ?string $slug = 'setor-sampah';
+
+    protected static ?string $pluralModelLabel = 'Setor Sampah';
 
     protected static ?int $navigationSort = 1;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Transaksi';
 
     public static function form(Schema $schema): Schema
     {

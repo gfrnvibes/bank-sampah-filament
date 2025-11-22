@@ -15,18 +15,23 @@ class WasteDepositForm
             ->components([
                 Select::make('user_id')
                     ->relationship('user', 'name')
+                    ->label('Pilih Nasabah')
                     ->required()
                     ->searchable()
                     ->native(false),
                 TextInput::make('waste_items')
+                    ->label('Jenis Sampah')
                     ->required(),
                 TextInput::make('total_weight')
+                    ->label('Total Berat')
                     ->required()
                     ->numeric(),
                 TextInput::make('total_amount')
+                    ->label('Total Pendapatan')
                     ->required()
                     ->numeric(),
                 Textarea::make('notes')
+                    ->label('Catatan')
                     ->columnSpanFull(),
             ]);
     }

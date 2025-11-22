@@ -20,18 +20,25 @@ class WasteDepositsTable
         return $table
             ->columns([
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Tanggal')
+                    ->date()
                     ->sortable(),
                 TextColumn::make('user.name')
                     ->label('Nasabah')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('waste_items')
+                    ->label('Jenis Sampah')
                     ->formatStateUsing(fn ($state) => 'besi'),
                 TextColumn::make('total_weight')
+                    ->label('Total Berat')
                     ->numeric()
+                    ->suffix(' Kg')
+                    ->color('danger')
+                    ->alignCenter()
                     ->sortable(),
                 TextColumn::make('total_amount')
+                    ->label('Total Pendapatan')
                     ->badge()
                     ->size('xl')
                     ->color('success')

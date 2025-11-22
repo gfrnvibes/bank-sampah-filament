@@ -10,6 +10,11 @@ class ViewWasteDeposit extends ViewRecord
 {
     protected static string $resource = WasteDepositResource::class;
 
+    public function getHeading(): string
+    {
+        return 'Detail Setoran Sampah';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
