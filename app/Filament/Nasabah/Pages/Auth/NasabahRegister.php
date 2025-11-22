@@ -17,6 +17,8 @@ class NasabahRegister extends Register
 
                 TextInput::make('nik')
                     ->label('NIK')
+                    ->numeric()
+                    ->rule('digits:16')
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(16),
