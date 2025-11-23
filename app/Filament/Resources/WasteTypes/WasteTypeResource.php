@@ -22,14 +22,13 @@ class WasteTypeResource extends Resource
 {
     protected static ?string $model = WasteType::class;
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 4;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrash;
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Trash;
     protected static ?string $slug = 'jenis-sampah';
     protected static ?string $navigationLabel = 'Jenis Sampah';
     protected static ?string $pluralModelLabel = 'Jenis Sampah';
-
     protected static string|UnitEnum|null $navigationGroup = 'Menu';
 
     public static function form(Schema $schema): Schema

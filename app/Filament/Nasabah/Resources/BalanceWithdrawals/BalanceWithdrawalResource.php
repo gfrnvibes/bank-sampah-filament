@@ -94,20 +94,23 @@ class BalanceWithdrawalResource extends Resource
                     ->size('xxl')
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'pending' => 'Menunggu',
-                        'accepted' => 'Selesai',
+                        'accepted' => 'Disetujui',
                         'rejected' => 'Ditolak',
+                        'completed' => 'Selesai',
                         default => ucfirst($state),
                     })
                     ->icon(fn(string $state): ?string => match ($state) {
                         'pending' => 'heroicon-o-clock',
-                        'accepted' => 'heroicon-o-check-circle',
+                        'accepted' => 'heroicon-o-information-circle',
                         'rejected' => 'heroicon-o-x-circle',
+                        'completed' => 'heroicon-o-check-circle',
                         default => null,
                     })
                     ->color(fn(string $state): string => match ($state) {
                         'pending' => 'gray',
-                        'accepted' => 'success',
+                        'accepted' => 'primary',
                         'rejected' => 'danger',
+                        'completed' => 'success',
                     }),
             ])->columns(3);
     }
@@ -137,18 +140,21 @@ class BalanceWithdrawalResource extends Resource
                         'pending' => 'Menunggu',
                         'accepted' => 'Selesai',
                         'rejected' => 'Ditolak',
+                        'completed' => 'Selesai',
                         default => ucfirst($state),
                     })
                     ->icon(fn(string $state): ?string => match ($state) {
                         'pending' => 'heroicon-o-clock',
                         'accepted' => 'heroicon-o-check-circle',
                         'rejected' => 'heroicon-o-x-circle',
+                        'completed' => 'heroicon-o-check-circle',
                         default => null,
                     })
                     ->color(fn(string $state): string => match ($state) {
                         'pending' => 'gray',
-                        'accepted' => 'success',
+                        'accepted' => 'primary',
                         'rejected' => 'danger',
+                        'completed' => 'success',
                     }),
             ])
             ->filters([

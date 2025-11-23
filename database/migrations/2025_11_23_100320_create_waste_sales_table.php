@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('balance_withdrawals', function (Blueprint $table) {
+        Schema::create('waste_sales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->decimal('amount', 15, 2); // Nominal penarikan
-            $table->enum('status', ['pending', 'accepted', 'rejected', 'completed'])->default('pending');
+            $table->json('waste_items'); // jenis, berat, harga jual per jenis
+            $table->decimal('total_weight', 8, 2);
+            $table->decimal('total_income', 15, 2); // pendapatan hasil penjualan
+            $table->text('buyer')->nullable(); // pengepul siapa (opsional)
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('balance_withdrawals');
+        Schema::dropIfExists('waste_sales');
     }
 };

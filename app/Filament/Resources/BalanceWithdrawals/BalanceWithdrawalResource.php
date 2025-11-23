@@ -2,29 +2,30 @@
 
 namespace App\Filament\Resources\BalanceWithdrawals;
 
+use App\Filament\Resources\BalanceWithdrawals\Pages\ManageBalanceWithdrawals;
+use App\Models\BalanceWithdrawal;
+use App\Models\User;
 use BackedEnum;
-use UnitEnum;
-use Filament\Tables\Table;
 use Filament\Actions\Action;
-use Filament\Schemas\Schema;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Resources\Resource;
-use App\Models\BalanceWithdrawal;
-use Filament\Actions\ActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Tables\Filters\Filter;
-use Filament\Support\Icons\Heroicon;
-use Filament\Actions\BulkActionGroup;
-use Filament\Forms\Components\Select;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Enums\FiltersLayout;
 use Filament\Forms\Components\DatePicker;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
-use App\Filament\Resources\BalanceWithdrawals\Pages\ManageBalanceWithdrawals;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 
 class BalanceWithdrawalResource extends Resource
 {
@@ -49,7 +50,7 @@ class BalanceWithdrawalResource extends Resource
         return $schema
             ->components([
                 Select::make('user_id')
-                    ->relationship('user', 'name')
+                    ->options(User::query()->where('id', '!=', 1)->pluck('name', 'id'))
                     ->label('Pilih Nasabah')
                     ->required()
                     ->searchable()
@@ -59,7 +60,12 @@ class BalanceWithdrawalResource extends Resource
                     ->required()
                     ->numeric(),
                 Select::make('status')
-                    ->options(['pending' => 'Pending', 'accepted' => 'Accepted', 'rejected' => 'Rejected'])
+                    ->options([
+                        'pending' => 'Pending',
+                        'accepted' => 'Accepted',
+                        'rejected' => 'Rejected',
+                        'completed' => 'Completed'
+                    ])
                     ->default('pending')
                     ->native(false)
                     ->required(),
@@ -85,19 +91,22 @@ class BalanceWithdrawalResource extends Resource
                     ->size('xl')
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'pending' => 'Menunggu',
-                        'accepted' => 'Selesai',
+                        'accepted' => 'Disetujui',
                         'rejected' => 'Ditolak',
+                        'completed' => 'Selesai',
                         default => ucfirst($state),
                     })
                     ->color(fn(string $state): string => match ($state) {
                         'pending' => 'gray',
-                        'accepted' => 'success',
+                        'accepted' => 'primary',
                         'rejected' => 'danger',
+                        'completed' => 'success'
                     })
                     ->icon(fn(string $state): ?string => match ($state) {
                         'pending' => 'heroicon-o-clock',
-                        'accepted' => 'heroicon-o-check-circle',
+                        'accepted' => 'heroicon-o-information-circle',
                         'rejected' => 'heroicon-o-x-circle',
+                        'completed' => 'heroicon-o-check-circle',
                         default => null,
                     }),
                 TextEntry::make('created_at')
@@ -133,19 +142,22 @@ class BalanceWithdrawalResource extends Resource
                     ->size('xl')
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'pending' => 'Menunggu',
-                        'accepted' => 'Selesai',
+                        'accepted' => 'Disetujui',
                         'rejected' => 'Ditolak',
+                        'completed' => 'Selesai',
                         default => ucfirst($state),
                     })
                     ->color(fn(string $state): string => match ($state) {
                         'pending' => 'gray',
-                        'accepted' => 'success',
+                        'accepted' => 'primary',
                         'rejected' => 'danger',
+                        'completed' => 'success',
                     })
                     ->icon(fn(string $state): ?string => match ($state) {
                         'pending' => 'heroicon-o-clock',
-                        'accepted' => 'heroicon-o-check-circle',
+                        'accepted' => 'heroicon-o-information-circle',
                         'rejected' => 'heroicon-o-x-circle',
+                        'completed' => 'heroicon-o-check-circle',
                         default => null,
                     }),
                 TextColumn::make('updated_at')
@@ -160,7 +172,8 @@ class BalanceWithdrawalResource extends Resource
                                 ->options([
                                     'pending' => 'Pending',
                                     'accepted' => 'Accepted',
-                                    'rejected' => 'Rejected', 
+                                    'rejected' => 'Rejected',
+                                    'completed' => 'Complete',
                                 ])->native(false),
                             DatePicker::make('created_from')->label('Created from'),
                             DatePicker::make('created_until')->label('Created until'),
@@ -195,7 +208,17 @@ class BalanceWithdrawalResource extends Resource
                         ->label('Accept')
                         ->requiresConfirmation()
                         ->action(function (BalanceWithdrawal $record) {
-                            $record->status = 'accepted';
+                            $record->status = 'accepted';                
+                            $record->save();
+                        })
+                        ->icon('heroicon-o-information-circle')
+                        ->color('primary')
+                        ->visible(fn (BalanceWithdrawal $record): bool => $record->status === 'pending'),
+                    Action::make('completed')
+                        ->label('Complete')
+                        ->requiresConfirmation()
+                        ->action(function (BalanceWithdrawal $record) {
+                            $record->status = 'completed';
 
                             $user = $record->user;
                             $user->balance -= $record->amount;
@@ -205,7 +228,8 @@ class BalanceWithdrawalResource extends Resource
                         })
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
-                        ->visible(fn (BalanceWithdrawal $record): bool => $record->status === 'pending'),
+                        ->visible(fn (BalanceWithdrawal $record): bool => $record->status === 'accepted'),
+                    
                     Action::make('reject')
                         ->label('Reject')
                         ->requiresConfirmation()
@@ -215,9 +239,9 @@ class BalanceWithdrawalResource extends Resource
                         })
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
-                        ->visible(fn (BalanceWithdrawal $record): bool => $record->status === 'pending'),
+                        ->visible(fn (BalanceWithdrawal $record): bool => $record->status === 'pending' || $record->status === 'accepted' ),
 
-                                    ViewAction::make(),
+                        ViewAction::make(),
 
                 ]),
 

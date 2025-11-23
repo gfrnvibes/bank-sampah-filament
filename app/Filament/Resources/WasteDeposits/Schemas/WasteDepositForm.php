@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources\WasteDeposits\Schemas;
 
+use App\Models\User;
 use App\Models\WasteType;
-use Filament\Forms\Components\Repeater;
+use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Schema;
 
 class WasteDepositForm
 {
@@ -18,7 +19,7 @@ class WasteDepositForm
             ->components([
                 Grid::make(3)->schema([
                     Select::make('user_id')
-                        ->relationship('user', 'name')
+                        ->options(User::query()->where('id', '!=', 1)->pluck('name', 'id'))
                         ->label('Pilih Nasabah')
                         ->required()
                         ->searchable()

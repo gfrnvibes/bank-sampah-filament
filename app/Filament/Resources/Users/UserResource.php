@@ -21,11 +21,10 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?int $navigationSort = 4;
-
+    
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::UserGroup;
-
+    protected static ?int $navigationSort = 6;
     protected static ?string $slug = 'list-nasabah';
     protected static ?string $navigationLabel = 'Nasabah';
     protected static ?string $pluralModelLabel = 'Daftar Nasabah';
