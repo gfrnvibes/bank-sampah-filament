@@ -25,11 +25,10 @@ class WasteDepositResource extends Resource
 
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Truck;
 
-    protected static ?string $navigationLabel = 'Setor Sampah';
+    protected static ?string $navigationLabel = 'Penyetoran Sampah';
 
-    protected static ?string $slug = 'setor-sampah';
-
-    protected static ?string $pluralModelLabel = 'Setor Sampah';
+    protected static ?string $slug = 'penyetoran-sampah';
+    protected static ?string $pluralModelLabel = 'Penyetoran Sampah';
 
     protected static ?int $navigationSort = 1;
 
