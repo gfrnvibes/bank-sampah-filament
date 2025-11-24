@@ -3,11 +3,13 @@
 namespace App\Filament\Resources\BalanceWithdrawals\Widgets;
 
 use Filament\Tables\Table;
+use Filament\Actions\Action;
 use App\Models\BalanceWithdrawal;
 use Filament\Widgets\TableWidget;
 use Filament\Actions\BulkActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\BalanceWithdrawals\BalanceWithdrawalResource;
 
 class LatestBalanceWithdrawal extends TableWidget
 {
@@ -59,7 +61,12 @@ class LatestBalanceWithdrawal extends TableWidget
                 //
             ])
             ->recordActions([
-                //
+                
+            ])
+            ->headerActions([
+                Action::make('Lihat Semua')
+                    ->icon('heroicon-o-arrow-top-right-on-square')
+                    ->url('/admin/penarikan-saldo'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
