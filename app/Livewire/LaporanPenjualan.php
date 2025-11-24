@@ -7,12 +7,15 @@ use App\Models\WasteSale;
 use Filament\Tables\Table;
 use App\Models\WasteDeposit;
 use Filament\Actions\CreateAction;
+use Filament\Tables\Filters\Filter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Actions\ForceDeleteBulkAction;
@@ -21,6 +24,8 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Actions\Concerns\InteractsWithActions;
 use App\Filament\Resources\WasteSales\WasteSaleResource;
 use App\Filament\Resources\WasteDeposits\WasteDepositResource;
+use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
+use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
 
 class LaporanPenjualan extends Component implements HasForms, HasTable, HasActions
 {
@@ -62,26 +67,43 @@ class LaporanPenjualan extends Component implements HasForms, HasTable, HasActio
             ])
             ->recordUrl(fn(WasteSale $record): string => WasteSaleResource::getUrl('view', ['record' => $record->id]))
             ->filters([
-                
+                Filter::make('advanced')
+                    ->schema([
+                        DatePicker::make('created_from')->label('Created from'),
+                        DatePicker::make('created_until')->label('Created until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'] ?? null,
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'] ?? null,
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    }),
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\ViewAction::make()->url(fn (Milestone $record) => MilestoneResource::getUrl('view', ['record' => $record->id]))
 
+            ])
+            ->headerActions([
+                FilamentExportHeaderAction::make('export'),
+                // CreateAction::make()
+                //     ->mutateFormDataUsing(fn(array $data): array => WasteDeposit::mutateFormDataBeforeCreate($data))
+                //     ->visible(url()->current() != WasteDepositResource::getUrl('index')),
+            ])
+            ->bulkActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
+                    FilamentExportBulkAction::make('export')
+                ]),
             ]);
-            // ->headerActions([
-            //     CreateAction::make()
-            //         ->mutateFormDataUsing(fn(array $data): array => WasteDeposit::mutateFormDataBeforeCreate($data))
-            //         ->visible(url()->current() != WasteDepositResource::getUrl('index')),
-            // ])
-            // ->bulkActions([
-            //     BulkActionGroup::make([
-            //         DeleteBulkAction::make(),
-            //         ForceDeleteBulkAction::make(),
-            //         RestoreBulkAction::make(),
-            //     ]),
-            // ]);
     }
 
     public function render()
