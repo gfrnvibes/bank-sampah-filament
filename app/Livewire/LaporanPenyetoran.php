@@ -33,6 +33,7 @@ class LaporanPenyetoran extends Component implements HasForms, HasTable, HasActi
     public static function table(Table $table): Table
     {
         return $table
+            ->heading('Laporan Penyetoran Sampah')
             ->query(WasteDeposit::query())
             ->columns([
                 TextColumn::make('created_at')

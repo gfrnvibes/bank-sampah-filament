@@ -36,6 +36,7 @@ class LaporanPenjualan extends Component implements HasForms, HasTable, HasActio
     public static function table(Table $table): Table
     {
         return $table
+            ->heading('Laporan Penjualan Sampah')
             ->query(WasteSale::query())
             ->columns([
             TextColumn::make('created_at')

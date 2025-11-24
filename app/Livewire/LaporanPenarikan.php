@@ -4,11 +4,7 @@ namespace App\Livewire;
 
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
-use App\Filament\Resources\BalanceWithdrawals\BalanceWithdrawalResource;
-use App\Filament\Resources\WasteDeposits\WasteDepositResource;
-use App\Filament\Resources\WasteSales\WasteSaleResource;
 use App\Models\BalanceWithdrawal;
-use App\Models\WasteSale;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -16,7 +12,6 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
-use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -24,7 +19,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
@@ -38,6 +32,7 @@ class LaporanPenarikan extends Component implements HasForms, HasTable, HasActio
     public static function table(Table $table): Table
     {
         return $table
+            ->heading('Laporan Penarikan Saldo')
             ->query(BalanceWithdrawal::query())
             ->columns([
                 TextColumn::make('created_at')
