@@ -20,6 +20,7 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use App\Filament\Resources\BalanceWithdrawals\Widgets\LatestBalanceWithdrawal;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -40,8 +41,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                AccountWidget::class,
+                // AccountWidget::class,
                 // FilamentInfoWidget::class,
+                LatestBalanceWithdrawal::class,
             ])
             ->middleware([
                 EncryptCookies::class,

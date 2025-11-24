@@ -2,37 +2,39 @@
 
 namespace App\Filament\Resources\BalanceWithdrawals;
 
-use App\Filament\Resources\BalanceWithdrawals\Pages\ManageBalanceWithdrawals;
-use App\Models\BalanceWithdrawal;
-use App\Models\User;
+use UnitEnum;
 use BackedEnum;
+use App\Models\User;
+use Filament\Tables\Table;
 use Filament\Actions\Action;
-use Filament\Actions\ActionGroup;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
+use Filament\Schemas\Schema;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Enums\FiltersLayout;
+use App\Models\BalanceWithdrawal;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Table;
+use Filament\Support\Icons\Heroicon;
+use Filament\Actions\BulkActionGroup;
+use Filament\Forms\Components\Select;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
-use UnitEnum;
+use Filament\Infolists\Components\TextEntry;
+use App\Filament\Widgets\LatestBalanceWithdrawals;
+use App\Filament\Resources\BalanceWithdrawals\Pages\ManageBalanceWithdrawals;
+use App\Filament\Resources\BalanceWithdrawals\Widgets\LatestBalanceWithdrawal;
 
 class BalanceWithdrawalResource extends Resource
 {
     protected static ?string $model = BalanceWithdrawal::class;
     protected static ?int $navigationSort = 2;
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyDollar;
-    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::CurrencyDollar;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
+    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Banknotes;
     protected static ?string $navigationLabel = 'Penarikan Saldo';
     protected static ?string $slug = 'penarikan-saldo';
     protected static ?string $pluralModelLabel = 'Penarikan Saldo';
@@ -261,4 +263,5 @@ class BalanceWithdrawalResource extends Resource
             'index' => ManageBalanceWithdrawals::route('/'),
         ];
     }
+
 }
