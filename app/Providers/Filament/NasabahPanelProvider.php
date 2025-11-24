@@ -71,7 +71,7 @@ class NasabahPanelProvider extends PanelProvider
                     ->url('/') // redirect ke home
                     ->icon('heroicon-o-link')
                     ->group('Links') // opsional
-                    ->sort(3)
+                    ->sort(4)
                     ->openUrlInNewTab(), // kalo mau new tab
             ]);
     }
