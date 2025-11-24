@@ -8,6 +8,7 @@ use Filament\Enums\ThemeMode;
 use Filament\Pages\Dashboard;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
+use Filament\Auth\Pages\EditProfile;
 use Filament\Navigation\NavigationItem;
 use Filament\Widgets\FilamentInfoWidget;
 use Filament\Http\Middleware\Authenticate;
@@ -36,6 +37,7 @@ class NasabahPanelProvider extends PanelProvider
                 'primary' => Color::Green,
             ])
             ->spa()
+            ->profile(EditProfile::class, false)
             ->discoverResources(in: app_path('Filament/Nasabah/Resources'), for: 'App\Filament\Nasabah\Resources')
             ->discoverPages(in: app_path('Filament/Nasabah/Pages'), for: 'App\Filament\Nasabah\Pages')
             ->pages([
