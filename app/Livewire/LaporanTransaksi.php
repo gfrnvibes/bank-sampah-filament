@@ -4,12 +4,14 @@ namespace App\Livewire;
 
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
-use App\Models\BalanceWithdrawal;
+use App\Filament\Resources\WasteDeposits\WasteDepositResource;
+use App\Models\TransactionHistory;
+use App\Models\WasteDeposit;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Forms\Components\DatePicker;
@@ -23,7 +25,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
-class LaporanPenarikan extends Component implements HasForms, HasTable, HasActions
+class LaporanTransaksi extends Component implements HasForms, HasTable, HasActions
 {
     use InteractsWithTable;
     use InteractsWithForms;
@@ -32,54 +34,54 @@ class LaporanPenarikan extends Component implements HasForms, HasTable, HasActio
     public static function table(Table $table): Table
     {
         return $table
-            ->heading('Laporan Penarikan Saldo')
-            ->description('Penarikan Saldo yang dilakukan Nasabah')
-            ->query(BalanceWithdrawal::query())
+            ->heading('Laporan Transaksi')
+            ->description('Penyetoran dan Penarikan Saldo Nasabah')
+            ->query(TransactionHistory::query())
             ->columns([
                 TextColumn::make('created_at')
-                    ->label('Tanggal')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('user.name')
                     ->label('Nasabah')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('amount')
-                    ->label('Jumlah Penarikan')
-                    ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
+                TextColumn::make('type')
+                    ->label('Tipe')
                     ->badge()
-                    ->size('xl')
-                    ->color('success')
-                    ->sortable(),
-                TextColumn::make('status')
-                    ->badge()
-                    ->size('xl')
-                    ->formatStateUsing(fn(string $state): string => match ($state) {
-                        'pending' => 'Menunggu',
-                        'accepted' => 'Disetujui',
-                        'rejected' => 'Ditolak',
-                        'completed' => 'Selesai',
-                        default => ucfirst($state),
-                    })
                     ->color(fn(string $state): string => match ($state) {
-                        'pending' => 'gray',
-                        'accepted' => 'primary',
-                        'rejected' => 'danger',
-                        'completed' => 'success',
+                        TransactionHistory::TYPE_DEPOSIT => 'success',
+                        TransactionHistory::TYPE_WITHDRAWAL => 'danger',
                     })
-                    ->icon(fn(string $state): ?string => match ($state) {
-                        'pending' => 'heroicon-o-clock',
-                        'accepted' => 'heroicon-o-information-circle',
-                        'rejected' => 'heroicon-o-x-circle',
-                        'completed' => 'heroicon-o-check-circle',
-                        default => null,
-                    }),
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        TransactionHistory::TYPE_DEPOSIT => 'Penyetoran',
+                        TransactionHistory::TYPE_WITHDRAWAL => 'Penarikan',
+                    })
+                    ->sortable(),
+                TextColumn::make('amount')
+                    ->label('Jumlah')
+                    ->money('IDR', locale: 'id_ID', decimalPlaces: 0)
+                    ->prefix(fn($record) => $record->type === TransactionHistory::TYPE_DEPOSIT ? '+ ' : '- ')
+                    ->color(fn($record) => match ($record->type) {
+                        TransactionHistory::TYPE_DEPOSIT => 'success',
+                        TransactionHistory::TYPE_WITHDRAWAL => 'danger',
+                        default => 'gray',
+                    })
+                    ->sortable(),
+                TextColumn::make('balance_before')
+                    ->label('Saldo Sebelum')
+                    ->money('IDR', locale: 'id_ID', decimalPlaces: 0)
+                    ->sortable(),
+                TextColumn::make('balance_after')
+                    ->label('Saldo Setelah')
+                    ->money('IDR', locale: 'id_ID', decimalPlaces: 0)
+                    ->sortable(),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
             ])
-            // ->recordUrl(fn(BalanceWithdrawal $record): string => BalanceWithdrawalResource::getUrl('view', ['record' => $record->id]))
             ->filters([
                 Filter::make('advanced')
                     ->schema([
@@ -122,6 +124,6 @@ class LaporanPenarikan extends Component implements HasForms, HasTable, HasActio
 
     public function render()
     {
-        return view('livewire.laporan-penarikan');
+        return view('livewire.laporan-transaksi');
     }
 }

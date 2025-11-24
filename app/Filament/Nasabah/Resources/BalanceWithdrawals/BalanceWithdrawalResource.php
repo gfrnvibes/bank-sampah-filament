@@ -122,9 +122,10 @@ class BalanceWithdrawalResource extends Resource
                 fn($query) =>
                 $query->where('user_id', auth()->id())
             )
+            ->heading('Riwayat Penarikan Saldo')
             ->columns([
                 TextColumn::make('created_at')
-                    ->label('Tanggal')
+                    ->label('Tanggal & Waktu')
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('amount')
@@ -186,7 +187,10 @@ class BalanceWithdrawalResource extends Resource
                     }),
             ])
             ->recordActions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->label('Lihat Detail')
+                    ->modalWidth('xl')
+                    ->modalHeading('Detail Penarikan Saldo'),
                 // EditAction::make(),
                 // DeleteAction::make(),
             ])

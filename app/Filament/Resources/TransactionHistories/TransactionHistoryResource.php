@@ -24,6 +24,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Infolists\Components\TextEntry;
+use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
 use App\Filament\Resources\TransactionHistories\Pages\ManageTransactionHistories;
 
 class TransactionHistoryResource extends Resource
@@ -105,6 +106,7 @@ class TransactionHistoryResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->heading('Penyetoran dan Penarikan Saldo Nasabah')
             ->columns([
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -120,6 +122,10 @@ class TransactionHistoryResource extends Resource
                     ->color(fn (string $state): string => match ($state) {
                         TransactionHistory::TYPE_DEPOSIT => 'success',
                         TransactionHistory::TYPE_WITHDRAWAL => 'danger',
+                    })
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        TransactionHistory::TYPE_DEPOSIT => 'Penyetoran',
+                        TransactionHistory::TYPE_WITHDRAWAL => 'Penarikan',
                     })
                     ->sortable(),
                 // TextColumn::make('reference_id')
@@ -150,7 +156,7 @@ class TransactionHistoryResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('type')
-                    ->options(['deposit' => 'Deposit', 'withdrawal' => 'Withdrawal'])
+                    ->options(['deposit' => 'Penyetoran', 'withdrawal' => 'Penarikan'])
                     ->label('Tipe')
                     ->native(false),
                 Filter::make('advanced')
@@ -170,6 +176,9 @@ class TransactionHistoryResource extends Resource
                             );
                     }),
 
+            ])
+            ->headerActions([
+                FilamentExportHeaderAction::make('export'),
             ])
             ->recordActions([
                 ActionGroup::make([

@@ -270,7 +270,10 @@ class BalanceWithdrawalResource extends Resource
                         ->color('danger')
                         ->visible(fn(BalanceWithdrawal $record): bool => $record->status === 'pending' || $record->status === 'accepted'),
 
-                    ViewAction::make(),
+                    ViewAction::make()
+                        ->label('Lihat Detail')
+                        ->modalWidth('md')
+                        ->modalHeading('Detail Penarikan Saldo'),
 
                 ]),
 

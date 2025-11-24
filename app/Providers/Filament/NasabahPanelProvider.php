@@ -69,7 +69,7 @@ class NasabahPanelProvider extends PanelProvider
             ->navigationItems([
                 NavigationItem::make('Halaman Utama')
                     ->url('/') // redirect ke home
-                    ->icon('heroicon-o-link')
+                    ->icon('heroicon-o-arrow-top-right-on-square')
                     ->group('Links') // opsional
                     ->sort(4)
                     ->openUrlInNewTab(), // kalo mau new tab

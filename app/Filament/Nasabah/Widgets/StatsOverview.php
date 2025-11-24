@@ -15,20 +15,26 @@ class StatsOverview extends StatsOverviewWidget
         $userId = auth()->user()?->id;
 
         return [
-            Stat::make('Saldo (Rp)',
-                User::where('id', $userId)
-                    ->sum('balance')
-            ),
+            // number format with RP currency
+            Stat::make('Saldo Kamu',
+                'Rp ' . number_format(User::where('id', $userId)
+                    ->sum('balance'), 0, ',', '.')
+            )
+            ->color('success'),
 
-            Stat::make('Berat Sampah Terkumpul (Kg)',
-                WasteDeposit::where('user_id', $userId)
-                    ->sum('total_weight')
-            ),
+             // number format with KG currency
+            Stat::make('Berat Sampah Terkumpul',
+                number_format(WasteDeposit::where('user_id', $userId)
+                    ->sum('total_weight'), 0, ',', '.') . ' Kg'
+            )
+            ->color('warning'),
 
+            // prefix x
             Stat::make('Setor Sampah',
                 WasteDeposit::where('user_id', $userId)
-                    ->count()
-            ),
+                    ->count() . 'x (kali)'
+            )
+            ->color('primary'),
         ];
     }
 }

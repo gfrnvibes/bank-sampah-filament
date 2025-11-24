@@ -2,9 +2,11 @@
 
 namespace App\Filament\Nasabah\Resources\BalanceWithdrawals\Pages;
 
+use App\Filament\Nasabah\Resources\BalanceWithdrawals\BalanceWithdrawalResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ManageRecords;
-use App\Filament\Nasabah\Resources\BalanceWithdrawals\BalanceWithdrawalResource;
+use Filament\Schemas\Components\Text;
+use Illuminate\Support\Facades\Auth;
 
 class ManageBalanceWithdrawals extends ManageRecords
 {
@@ -14,10 +16,13 @@ class ManageBalanceWithdrawals extends ManageRecords
     {
         return [
             CreateAction::make()
-            ->label('Tarik Saldo')
-            ->modalWidth('md')
-            ->createAnother(false)
-            ->icon('heroicon-o-plus-circle'),
+                ->label('Tarik Saldo')
+                ->modalHeading('Tarik Saldo')
+                ->modalWidth('md')
+                ->createAnother(false)
+                ->icon('heroicon-o-plus-circle')
+                ->modalSubmitActionLabel('Tarik Saldo')
+
         ];
     }
 }

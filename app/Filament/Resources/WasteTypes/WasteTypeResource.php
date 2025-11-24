@@ -75,7 +75,10 @@ class WasteTypeResource extends Resource
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                        ->modalWidth('md')
+                        ->modalSubmitActionLabel('Simpan')
+                        ->modalHeading('Edit Jenis Sampah'),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

@@ -16,6 +16,8 @@ class ManageWasteTypes extends ManageRecords
             CreateAction::make()
                 ->label('Tambah Jenis Sampah')
                 ->modalWidth('md')
+                ->modalSubmitActionLabel('Simpan')
+                ->modalHeading('Buat Jenis Sampah')
                 ->icon('heroicon-o-plus-circle'),
         ];
     }

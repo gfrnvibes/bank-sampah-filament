@@ -18,6 +18,7 @@ class WasteDepositsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->heading('Riwayat Penyetoran Sampah')
             ->modifyQueryUsing(
                 fn($query) =>
                 $query->where('user_id', auth()->id())

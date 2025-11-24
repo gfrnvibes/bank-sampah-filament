@@ -8,6 +8,7 @@ use Filament\Pages\Page;
 use Filament\Schemas\Schema;
 use App\Livewire\LaporanPenarikan;
 use App\Livewire\LaporanPenjualan;
+use App\Livewire\LaporanTransaksi;
 use App\Livewire\LaporanPenyetoran;
 use Filament\Support\Icons\Heroicon;
 use Filament\Schemas\Components\Tabs;
@@ -39,18 +40,29 @@ class Laporan extends Page
                 Tabs::make('Tabs')
                     ->contained(false)
                     ->tabs([
-                        Tab::make('active-tasks')->label('Penyetoran')
+                        Tab::make('active-tasks')
+                            ->label('Penyetoran')
                             ->schema([
                                 Livewire::make(LaporanPenyetoran::class)->key('active-tasks-table')
-                            ])->icon(Heroicon::Truck),
-                        Tab::make('Tab 2')->label('Penjualan')
+                            ])
+                            ->icon(Heroicon::Truck),
+                        Tab::make('Tab 2')
+                            ->label('Penjualan')
                             ->schema([
                                 Livewire::make(LaporanPenjualan::class)->key('active-tasks-table-2')->lazy()
-                            ])->icon(Heroicon::ShoppingBag),
-                        Tab::make('Tab 3')->label('Penarikan')
+                            ])
+                            ->icon(Heroicon::ShoppingBag),
+                        Tab::make('Tab 3')
+                            ->label('Penarikan')
                             ->schema([
                                 Livewire::make(LaporanPenarikan::class)->key('active-tasks-table-3')->lazy()
-                            ])->icon(Heroicon::Banknotes),
+                            ])
+                            ->icon(Heroicon::Banknotes),
+                        Tab::make('Tab 4')->label('Transaksi')
+                            ->schema([
+                                Livewire::make(LaporanTransaksi::class)->key('active-tasks-table-4')->lazy()
+                            ])
+                            ->icon(Heroicon::Clock),
                     ]),
             ]);
     }
