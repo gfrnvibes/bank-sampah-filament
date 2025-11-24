@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class TransactionHistory extends Model
 {
     use HasFactory;
+    const TYPE_DEPOSIT = 'deposit';
+    const TYPE_WITHDRAWAL = 'withdrawal';
 
     protected $fillable = ['user_id', 'type', 'amount', 'description', 'reference_id', 'status'];
 
@@ -34,4 +36,16 @@ class TransactionHistory extends Model
     {
         return $this->belongsTo(\App\Models\WasteDeposit::class, 'reference_id');
     }
+
+    public function getReferenceDataAttribute()
+    {
+        if ($this->type === self::TYPE_DEPOSIT) {
+            return $this->wasteDeposit;
+        } elseif ($this->type === self::TYPE_WITHDRAWAL) {
+            return $this->balanceWithdrawal;
+        }
+
+        return null;
+    }
+
 }
