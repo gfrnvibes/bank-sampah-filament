@@ -30,7 +30,7 @@ class WasteDepositForm
                         ->suffix(' Kg')
                         ->readonly()
                         ->reactive(),
-    
+
                     TextInput::make('total_amount')
                         ->label('Total Pendapatan')
                         ->numeric()
@@ -47,7 +47,7 @@ class WasteDepositForm
                             ->label('Jenis Sampah')
                             ->required()
                             ->searchable()
-                            ->options(fn () => WasteType::query()->pluck('name', 'id'))
+                            ->options(fn() => WasteType::query()->pluck('name', 'id'))
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set, callable $get) {
                                 $wt = WasteType::find($state);

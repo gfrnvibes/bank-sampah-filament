@@ -13,6 +13,7 @@ use Filament\Actions\ViewAction;
 use Filament\Resources\Resource;
 use App\Models\BalanceWithdrawal;
 use Filament\Actions\ActionGroup;
+use App\Models\TransactionHistory;
 use Filament\Actions\DeleteAction;
 use Filament\Tables\Filters\Filter;
 use Filament\Support\Icons\Heroicon;
@@ -42,10 +43,10 @@ class BalanceWithdrawalResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::where('status', 'pending')->count();
+        return static::getModel()::where('status', 'pending')->orWhere('status', 'accepted')->count();
     }
 
-    
+
 
     public static function form(Schema $schema): Schema
     {
@@ -61,7 +62,20 @@ class BalanceWithdrawalResource extends Resource
                     ->label('Jumlah Penarikan')
                     ->prefix('Rp')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->rules([
+                        function ($get) {
+                            return function (string $attribute, $value, $fail) use ($get) {
+                                $userId = $get('user_id');
+                                if ($userId) {
+                                    $user = User::find($userId);
+                                    if ($user && $user->balance < $value) {
+                                        $fail('Saldo nasabah tidak mencukupi');
+                                    }
+                                }
+                            };
+                        }
+                    ]),
                 Select::make('status')
                     ->options([
                         'pending' => 'Pending',
@@ -75,7 +89,7 @@ class BalanceWithdrawalResource extends Resource
             ])->columns(1);
     }
 
-    
+
     public static function infolist(Schema $schema): Schema
     {
         return $schema
@@ -169,41 +183,41 @@ class BalanceWithdrawalResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                    Filter::make('advanced')
-                        ->schema([
-                            Select::make('status')
-                                ->options([
-                                    'pending' => 'Pending',
-                                    'accepted' => 'Accepted',
-                                    'rejected' => 'Rejected',
-                                    'completed' => 'Complete',
-                                ])->native(false),
-                            DatePicker::make('created_from')->label('Created from'),
-                            DatePicker::make('created_until')->label('Created until'),
-                        ])
-                        ->query(function (Builder $query, array $data): Builder {
-                            return $query
-                                ->when(
-                                    $data['created_from'] ?? null,
-                                    fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
-                                )
-                                ->when(
-                                    $data['created_until'] ?? null,
-                                    fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
-                                )
-                                ->when(
-                                    $data['status'] ?? null,
-                                    fn (Builder $query, $status): Builder => $query->where('status', $status),
-                                )
-                                ->when(
-                                    $data['payment_status'] ?? null,
-                                    fn (Builder $query, $payment): Builder => $query->where('payment_status', $payment),
-                                );
-                        }),
-                ])
-                ->filtersFormColumns(1) 
-                ->deferFilters(false)
-            
+                Filter::make('advanced')
+                    ->schema([
+                        Select::make('status')
+                            ->options([
+                                'pending' => 'Pending',
+                                'accepted' => 'Accepted',
+                                'rejected' => 'Rejected',
+                                'completed' => 'Complete',
+                            ])->native(false),
+                        DatePicker::make('created_from')->label('Created from'),
+                        DatePicker::make('created_until')->label('Created until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'] ?? null,
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'] ?? null,
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            )
+                            ->when(
+                                $data['status'] ?? null,
+                                fn(Builder $query, $status): Builder => $query->where('status', $status),
+                            )
+                            ->when(
+                                $data['payment_status'] ?? null,
+                                fn(Builder $query, $payment): Builder => $query->where('payment_status', $payment),
+                            );
+                    }),
+            ])
+            ->filtersFormColumns(1)
+            ->deferFilters(false)
+
             ->recordActions([
 
                 ActionGroup::make([
@@ -211,12 +225,12 @@ class BalanceWithdrawalResource extends Resource
                         ->label('Accept')
                         ->requiresConfirmation()
                         ->action(function (BalanceWithdrawal $record) {
-                            $record->status = 'accepted';                
+                            $record->status = 'accepted';
                             $record->save();
                         })
                         ->icon('heroicon-o-information-circle')
                         ->color('primary')
-                        ->visible(fn (BalanceWithdrawal $record): bool => $record->status === 'pending'),
+                        ->visible(fn(BalanceWithdrawal $record): bool => $record->status === 'pending'),
                     Action::make('completed')
                         ->label('Complete')
                         ->requiresConfirmation()
@@ -224,15 +238,27 @@ class BalanceWithdrawalResource extends Resource
                             $record->status = 'completed';
 
                             $user = $record->user;
+                            $balanceBefore = $user->balance;
                             $user->balance -= $record->amount;
                             $user->save(); // INI WAJIB
+                
+                            // Buat entri TransactionHistory
+                            TransactionHistory::create([
+                                'user_id' => $user->id,
+                                'type' => 'withdrawal',
+                                'amount' => $record->amount,
+                                'balance_before' => $balanceBefore,
+                                'balance_after' => $user->balance,
+                                'reference_type' => BalanceWithdrawal::class,
+                                'reference_id' => $record->id,
+                            ]);
                 
                             $record->save();
                         })
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
-                        ->visible(fn (BalanceWithdrawal $record): bool => $record->status === 'accepted'),
-                    
+                        ->visible(fn(BalanceWithdrawal $record): bool => $record->status === 'accepted'),
+
                     Action::make('reject')
                         ->label('Reject')
                         ->requiresConfirmation()
@@ -242,9 +268,9 @@ class BalanceWithdrawalResource extends Resource
                         })
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
-                        ->visible(fn (BalanceWithdrawal $record): bool => $record->status === 'pending' || $record->status === 'accepted' ),
+                        ->visible(fn(BalanceWithdrawal $record): bool => $record->status === 'pending' || $record->status === 'accepted'),
 
-                        ViewAction::make(),
+                    ViewAction::make(),
 
                 ]),
 

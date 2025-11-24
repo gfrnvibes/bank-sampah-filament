@@ -4,6 +4,7 @@ namespace App\Filament\Resources\TransactionHistories\Pages;
 
 use App\Filament\Resources\TransactionHistories\TransactionHistoryResource;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\ManageRecords;
 
 class ManageTransactionHistories extends ManageRecords
