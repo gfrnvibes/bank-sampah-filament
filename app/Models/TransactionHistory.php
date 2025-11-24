@@ -11,10 +11,12 @@ class TransactionHistory extends Model
     const TYPE_DEPOSIT = 'deposit';
     const TYPE_WITHDRAWAL = 'withdrawal';
 
-    protected $fillable = ['user_id', 'type', 'amount', 'description', 'reference_id'];
+    protected $fillable = ['user_id', 'type', 'amount', 'description', 'reference_id', 'status', 'balance_before', 'balance_after'];
 
     protected $casts = [
         'amount' => 'decimal:2',
+        'balance_before' => 'decimal:2',
+        'balance_after' => 'decimal:2',
     ];
 
     public function user()

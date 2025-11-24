@@ -33,17 +33,22 @@ class WasteDeposit extends Model
 
         static::created(function ($wasteDeposit) {
             // Buat transaksi history
+            $user = User::find($wasteDeposit->user_id);
+            $balanceBefore = $user->balance;
+            $balanceAfter = $balanceBefore + $wasteDeposit->total_amount;
+
             $transaction = TransactionHistory::create([
                 'user_id' => $wasteDeposit->user_id,
                 'type' => TransactionHistory::TYPE_DEPOSIT,
                 'amount' => $wasteDeposit->total_amount,
                 'description' => 'Penyetoran sampah',
                 'reference_id' => $wasteDeposit->id,
+                'balance_before' => $balanceBefore,
+                'balance_after' => $balanceAfter
             ]);
 
             // Update balance user
-            $user = User::find($wasteDeposit->user_id);
-            $user->balance += $wasteDeposit->total_amount;
+            $user->balance = $balanceAfter;
             $user->save();
         });
     }
