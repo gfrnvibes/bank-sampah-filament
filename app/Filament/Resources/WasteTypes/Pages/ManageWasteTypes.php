@@ -13,7 +13,10 @@ class ManageWasteTypes extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->label('Tambah Jenis Sampah'),
+            CreateAction::make()
+                ->label('Tambah Jenis Sampah')
+                ->modalWidth('md')
+                ->icon('heroicon-o-plus-circle'),
         ];
     }
 }

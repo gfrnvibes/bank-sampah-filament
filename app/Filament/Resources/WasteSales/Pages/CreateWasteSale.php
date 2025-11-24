@@ -11,6 +11,6 @@ class CreateWasteSale extends CreateRecord
 
     public function getTitle(): string
     {
-        return 'Buat Penjualan Sampah';
+        return 'Tambah Penjualan Sampah';
     }
 }

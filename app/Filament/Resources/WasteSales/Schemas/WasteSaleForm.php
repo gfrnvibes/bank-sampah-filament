@@ -29,11 +29,13 @@ class WasteSaleForm
                             // Perhitungan berat sampah harus reactive
                             TextInput::make('weight')
                                 ->label('Berat Sampah (kg)')
+                                ->suffix('Kg')
                                 ->required()
                                 ->numeric(),
                             // Perhitungan total price harus reactive
                             TextInput::make('price')
                                 ->label('Harga per Kg')
+                                ->prefix('Rp')
                                 ->required()
                                 ->numeric(),
                         ])

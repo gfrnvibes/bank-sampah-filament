@@ -61,7 +61,8 @@ class WasteDepositForm
                             }),
 
                         TextInput::make('price_per_kg')
-                            ->label('Harga / kg')
+                            ->label('Harga per Kg')
+                            ->prefix('Rp')
                             ->numeric()
                             ->disabled()
                             ->reactive(),
@@ -79,6 +80,7 @@ class WasteDepositForm
                         TextInput::make('amount')
                             ->label('Pendapatan')
                             ->numeric()
+                            ->prefix('Rp')
                             ->disabled()
                             ->reactive(),
                     ])

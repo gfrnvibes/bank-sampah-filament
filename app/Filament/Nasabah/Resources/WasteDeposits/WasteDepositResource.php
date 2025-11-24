@@ -24,9 +24,9 @@ class WasteDepositResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTruck;
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Truck;
-    protected static ?string $navigationLabel = 'Setoran Sampah';
-    protected static ?string $slug = 'setoran-sampah';
-    protected static ?string $pluralModelLabel = 'Setoran Sampah';
+    protected static ?string $navigationLabel = 'Penyetoran Sampah';
+    protected static ?string $slug = 'penyetoran-sampah';
+    protected static ?string $pluralModelLabel = 'Penyetoran Sampah';
     protected static string|UnitEnum|null $navigationGroup = 'Transaksi';
 
     protected static ?int $navigationSort = 1;

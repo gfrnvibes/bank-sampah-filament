@@ -36,10 +36,11 @@ class WasteTypeResource extends Resource
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Nama')
+                    ->label('Nama Jenis Sampah')
                     ->required(),
                 TextInput::make('price_per_kg')
-                    ->label('Harga (kg)')
+                    ->label('Harga per Kg')
+                    ->prefix('Rp')
                     ->required()
                     ->numeric(),
                 Textarea::make('description')

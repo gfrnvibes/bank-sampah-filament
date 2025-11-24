@@ -30,8 +30,8 @@ class BalanceWithdrawalResource extends Resource
 {
     protected static ?string $model = BalanceWithdrawal::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyDollar;
-    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::CurrencyDollar;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
+    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Banknotes;
     protected static ?string $navigationLabel = 'Penarikan Saldo';
     protected static ?string $slug = 'penarikan-saldo';
     protected static ?string $pluralModelLabel = 'Penarikan Saldo';

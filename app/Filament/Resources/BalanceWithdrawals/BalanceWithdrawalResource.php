@@ -59,6 +59,7 @@ class BalanceWithdrawalResource extends Resource
                     ->native(false),
                 TextInput::make('amount')
                     ->label('Jumlah Penarikan')
+                    ->prefix('Rp')
                     ->required()
                     ->numeric(),
                 Select::make('status')

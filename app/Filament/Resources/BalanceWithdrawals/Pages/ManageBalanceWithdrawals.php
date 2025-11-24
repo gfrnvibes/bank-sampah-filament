@@ -14,7 +14,10 @@ class ManageBalanceWithdrawals extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->label('Buat Penarikan Saldo'),
+            CreateAction::make()
+                ->label('Buat Penarikan Saldo')
+                ->modalWidth('md')
+                ->icon('heroicon-o-plus-circle'),
         ];
     }
 

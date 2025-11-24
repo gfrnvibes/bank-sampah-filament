@@ -15,6 +15,8 @@ class ManageBalanceWithdrawals extends ManageRecords
         return [
             CreateAction::make()
             ->label('Tarik Saldo')
+            ->modalWidth('md')
+            ->createAnother(false)
             ->icon('heroicon-o-plus-circle'),
         ];
     }
