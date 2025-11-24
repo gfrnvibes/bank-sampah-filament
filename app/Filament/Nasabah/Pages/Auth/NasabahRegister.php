@@ -17,10 +17,11 @@ class NasabahRegister extends Register
 
                 TextInput::make('nik')
                     ->label('NIK')
-                    ->numeric()
-                    ->rule('digits:16')
+                    ->rule('regex:/^[0-9]{16}$/')
                     ->required()
+                    ->mask('9999999999999999')
                     ->unique(ignoreRecord: true)
+                    ->extraInputAttributes(['inputmode' => 'numeric']) // biar keyboard HP muncul angka semua
                     ->maxLength(16),
 
                 $this->getEmailFormComponent(),

@@ -20,5 +20,13 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'is_active' => true,
         ]);
+
+        \App\Models\User::factory()->create([
+            'name' => 'Gufron',
+            'email' => 'gufron@gmail.com',
+            'nik' => '3205201403010002',
+            'password' => bcrypt('password'),
+            'is_active' => true,
+        ]);
     }
 }
