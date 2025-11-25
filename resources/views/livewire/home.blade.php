@@ -49,12 +49,12 @@
     </style>
 
     <!-- TOP BAR IDENTITAS DESA -->
-    {{-- <div class="py-2 bg-brand-soft border-bottom">
+    <div class="py-2 bg-brand-soft border-bottom">
         <div class="container d-flex flex-wrap align-items-center gap-2">
             <span class="badge badge-desa rounded-pill px-3 py-2">Resmi Desa Tanggulun</span>
             <span class="text-brand fw-semibold">Kec. Kadungora, Kab. Garut</span>
         </div>
-    </div> --}}
+    </div>
 
     <!-- Hero Section -->
     <section class="section-py hero">
@@ -73,8 +73,8 @@
                             </a>
                         @endguest
                         @auth
-                            <a href="" class="btn btn-brand btn-lg px-4 py-2 fw-bold rounded-pill">
-                                Setor Sampah
+                            <a href="/nasabah" class="btn btn-brand btn-lg px-4 py-2 fw-bold rounded-pill">
+                                Dashboard
                             </a>
                         @endauth
                     </div>
@@ -116,60 +116,7 @@
         </div>
     </section>
 
-    @if (session()->has('success'))
-        <div class="container py-4">
-            <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
-            </div>
-        </div>
-    @endif
-
-    {{-- Modal Tarik Saldo --}}
-    {{-- <div class="modal fade" id="tarikModal" tabindex="-1" aria-labelledby="tarikModalLabel" aria-hidden="true" wire:ignore.self>
-        <div class="modal-dialog">
-            <div class="modal-content rounded-4">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="tarikModalLabel">Tarik Saldo</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <form wire:submit.prevent="withdrawBalance">
-                    <div class="modal-body">
-                        @if (session()->has('error'))
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                {{ session('error') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
-                            </div>
-                        @endif
-
-                        <div class="mb-2">
-                            <small class="text-muted">Saldo tersedia: Rp{{ number_format($userBalance, 0, ',', '.') }}</small>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="nominal" class="form-label text-secondary">Nominal</label>
-                            <div class="input-group">
-                                <span class="input-group-text">Rp</span>
-                                <input id="nominal" type="number"
-                                       class="form-control @error('withdrawalAmount') is-invalid @enderror"
-                                       wire:model="withdrawalAmount" placeholder="Masukkan nominal">
-                                @error('withdrawalAmount')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-brand" @if ($userBalance <= 0) disabled @endif wire:loading.attr="disabled">
-                            <span wire:loading.remove>Tarik Saldo Sekarang</span>
-                            <span wire:loading>Memproses...</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
-
+ 
     <!-- Tentang Desa / How It Works -->
     <section class="section-py">
         <div class="container">

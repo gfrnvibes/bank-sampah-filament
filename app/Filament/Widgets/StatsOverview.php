@@ -17,14 +17,15 @@ class StatsOverview extends StatsOverviewWidget
     {
         return [
             // Waste Sale Total Income - BalanceWithdrawal Total Amount
-            Stat::make('Saldo Bank Sampah', 'Rp ' . number_format(WasteSale::sum('total_income') - BalanceWithdrawal::sum('amount'), 0, '.', '.'))
+            Stat::make('Saldo Bank Sampah', 
+            'Rp ' . number_format(WasteSale::sum('total_income') - BalanceWithdrawal::where('status', 'completed')->sum('amount'), 0, '.', '.'))
                 ->description('32k increase')
                 ->color('success')
                 ->chart([7, 2, 10, 3, 15, 4, 17])
                 ->descriptionIcon('heroicon-m-arrow-trending-up', IconPosition::Before),
             
             // Outcome dari transaction history
-            Stat::make('Pengeluaran', 'Rp ' . number_format(BalanceWithdrawal::sum('amount'), 0, '.', '.'))
+            Stat::make('Pengeluaran', 'Rp ' . number_format(BalanceWithdrawal::where('status', 'completed')->sum('amount'), 0, '.', '.'))
                 ->description('12k decrease')
                 ->chart([7, 2, 10, 3, 15, 4, 17])
                 ->color('danger')

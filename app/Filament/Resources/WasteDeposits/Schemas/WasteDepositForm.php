@@ -4,12 +4,13 @@ namespace App\Filament\Resources\WasteDeposits\Schemas;
 
 use App\Models\User;
 use App\Models\WasteType;
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Repeater\TableColumn;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
 
 class WasteDepositForm
 {
@@ -40,14 +41,21 @@ class WasteDepositForm
                 ]),
                 Repeater::make('waste_items')
                     ->label('Jenis Sampah')
-                    ->createItemButtonLabel('Tambah Jenis Sampah')
+                    ->addActionLabel('Tambah Jenis Sampah')
                     ->columns(4)
+                    ->table([
+                        TableColumn::make('Jenis Sampah'),
+                        TableColumn::make('Berat'),
+                        TableColumn::make('Harga'),
+                        TableColumn::make('Pendapatan'),
+                    ])
                     ->schema([
                         Select::make('waste_type_id')
                             ->label('Jenis Sampah')
                             ->required()
                             ->searchable()
                             ->options(fn() => WasteType::query()->pluck('name', 'id'))
+                            // custom select on option change
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set, callable $get) {
                                 $wt = WasteType::find($state);
@@ -60,13 +68,6 @@ class WasteDepositForm
                                 }
                             }),
 
-                        TextInput::make('price_per_kg')
-                            ->label('Harga per Kg')
-                            ->prefix('Rp')
-                            ->numeric()
-                            ->disabled()
-                            ->reactive(),
-
                         TextInput::make('weight')
                             ->label('Berat (kg)')
                             ->numeric()
@@ -76,6 +77,13 @@ class WasteDepositForm
                                 $price = $get('price_per_kg') ?? 0;
                                 $set('amount', (float) $state * (float) $price);
                             }),
+
+                        TextInput::make('price_per_kg')
+                            ->label('Harga per Kg')
+                            ->prefix('Rp')
+                            ->numeric()
+                            ->disabled()
+                            ->reactive(),
 
                         TextInput::make('amount')
                             ->label('Pendapatan')
@@ -97,7 +105,8 @@ class WasteDepositForm
                         }
                         $set('total_weight', $totalWeight);
                         $set('total_amount', $totalAmount);
-                    }),
+                    })
+                    ->reorderable(false),
                 Textarea::make('notes')
                     ->label('Catatan'),
             ])->columns(1);

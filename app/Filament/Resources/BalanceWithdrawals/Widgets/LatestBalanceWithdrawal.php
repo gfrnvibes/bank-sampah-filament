@@ -20,7 +20,7 @@ class LatestBalanceWithdrawal extends TableWidget
         return $table
             ->heading('Penarikan Saldo Terbaru')
             ->paginated(false)
-            ->query(fn (): Builder => BalanceWithdrawal::query()->latest())
+            ->query(fn (): Builder => BalanceWithdrawal::query()->latest()->take(10))
             ->columns([
                 TextColumn::make('created_at')
                     ->label('Tanggal')

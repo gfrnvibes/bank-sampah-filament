@@ -2,29 +2,31 @@
 
 namespace App\Filament\Nasabah\Resources\BalanceWithdrawals;
 
-use App\Filament\Nasabah\Resources\BalanceWithdrawals\Pages\ManageBalanceWithdrawals;
-use App\Models\BalanceWithdrawal;
-use BackedEnum;
 use UnitEnum;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
+use BackedEnum;
+use Filament\Tables\Table;
+use Filament\Schemas\Schema;
+use Filament\Facades\Filament;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Facades\Filament;
-use Filament\Forms\Components\DatePicker;
+use Filament\Resources\Resource;
+use App\Models\BalanceWithdrawal;
+use Filament\Actions\DeleteAction;
+use Filament\Tables\Filters\Filter;
+use Filament\Support\Icons\Heroicon;
+use Filament\Actions\BulkActionGroup;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
+use Filament\Schemas\Components\Form;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Table;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\TextEntry;
 use Illuminate\Validation\ValidationException;
+use App\Filament\Nasabah\Resources\BalanceWithdrawals\Pages\ManageBalanceWithdrawals;
 
 class BalanceWithdrawalResource extends Resource
 {
@@ -122,6 +124,7 @@ class BalanceWithdrawalResource extends Resource
                 fn($query) =>
                 $query->where('user_id', auth()->id())
             )
+            ->defaultSort('created_at', 'desc')
             ->heading('Riwayat Penarikan Saldo')
             ->columns([
                 TextColumn::make('created_at')

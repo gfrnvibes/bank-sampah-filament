@@ -2,11 +2,12 @@
 
 namespace App\Filament\Nasabah\Resources\BalanceWithdrawals\Pages;
 
-use App\Filament\Nasabah\Resources\BalanceWithdrawals\BalanceWithdrawalResource;
 use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ManageRecords;
-use Filament\Schemas\Components\Text;
 use Illuminate\Support\Facades\Auth;
+use Filament\Schemas\Components\Text;
+use Filament\Notifications\Notification;
+use Filament\Resources\Pages\ManageRecords;
+use App\Filament\Nasabah\Resources\BalanceWithdrawals\BalanceWithdrawalResource;
 
 class ManageBalanceWithdrawals extends ManageRecords
 {
@@ -24,5 +25,15 @@ class ManageBalanceWithdrawals extends ManageRecords
                 ->modalSubmitActionLabel('Tarik Saldo')
 
         ];
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        // notifikasi database
+        $recipient = auth()->user();
+
+        Notification::make()
+            ->title('Saved successfully')
+            ->sendToDatabase($recipient);
     }
 }
