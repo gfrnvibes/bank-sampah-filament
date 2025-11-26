@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg sticky-top bg-success" data-bs-theme="dark">
     <div class="container">
         <a class="navbar-brand fw-bold" href="/">
-            <img src="{{ asset('images/logo.png') }}" alt="logo" width="140">
+            <img src="{{ asset('images/logo putih.png') }}" alt="logo" width="140">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
