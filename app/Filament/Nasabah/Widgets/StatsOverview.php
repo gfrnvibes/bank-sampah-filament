@@ -20,6 +20,7 @@ class StatsOverview extends StatsOverviewWidget
                 'Rp ' . number_format(User::where('id', $userId)
                     ->sum('balance'), 0, ',', '.')
             )
+            ->chart([7, 2, 10, 3, 15, 4, 17])
             ->color('success'),
 
              // number format with KG currency
@@ -27,14 +28,16 @@ class StatsOverview extends StatsOverviewWidget
                 number_format(WasteDeposit::where('user_id', $userId)
                     ->sum('total_weight'), 0, ',', '.') . ' Kg'
             )
-            ->color('warning'),
+                ->chart([17, 4, 15, 3, 10, 2, 7])
+                ->color('warning'),
 
             // prefix x
-            Stat::make('Setor Sampah',
+            Stat::make('Penyetoran Sampah',
                 WasteDeposit::where('user_id', $userId)
                     ->count() . 'x (kali)'
             )
-            ->color('primary'),
+                ->chart([7, 2, 10, 3, 15, 4, 17])
+                ->color('danger'),
         ];
     }
 }

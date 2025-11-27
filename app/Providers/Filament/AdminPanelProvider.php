@@ -2,27 +2,28 @@
 
 namespace App\Providers\Filament;
 
-use Filament\Panel;
-use Filament\PanelProvider;
-use Filament\Actions\Action;
-use Filament\Enums\ThemeMode;
-use Filament\Pages\Dashboard;
-use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Auth\Pages\EditProfile;
 use App\Filament\Pages\Auth\AdminLogin;
-use Filament\Widgets\FilamentInfoWidget;
+use App\Filament\Resources\BalanceWithdrawals\Widgets\LatestBalanceWithdrawal;
+use App\Http\Middleware\EnsureUserIsAdmin;
+use Filament\Actions\Action;
+use Filament\Auth\Pages\EditProfile;
+use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Cookie\Middleware\EncryptCookies;
 use Filament\Http\Middleware\AuthenticateSession;
-use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Filament\Pages\Dashboard;
+use Filament\Panel;
+use Filament\PanelProvider;
+use Filament\Support\Colors\Color;
+use Filament\Widgets\AccountWidget;
+use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use App\Filament\Resources\BalanceWithdrawals\Widgets\LatestBalanceWithdrawal;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -37,7 +38,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Violet,
             ])
             ->profile(EditProfile::class, false)          
-             ->databaseNotifications()
+            ->databaseNotifications()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -59,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                // EnsureUserIsAdmin::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

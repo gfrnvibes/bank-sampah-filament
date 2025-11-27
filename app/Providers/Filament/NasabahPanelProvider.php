@@ -2,27 +2,28 @@
 
 namespace App\Providers\Filament;
 
-use Filament\Panel;
-use Filament\PanelProvider;
-use Filament\Enums\ThemeMode;
-use Filament\Pages\Dashboard;
-use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Auth\Pages\EditProfile;
-use Filament\Navigation\NavigationItem;
-use Filament\Widgets\FilamentInfoWidget;
-use Filament\Http\Middleware\Authenticate;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Cookie\Middleware\EncryptCookies;
 use App\Filament\Nasabah\Pages\Auth\NasabahLogin;
-use Filament\Http\Middleware\AuthenticateSession;
 use App\Filament\Nasabah\Pages\Auth\NasabahRegister;
-use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Http\Middleware\EnsureUserIsRegularUser;
+use Filament\Auth\Pages\EditProfile;
+use Filament\Enums\ThemeMode;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Filament\Navigation\NavigationItem;
+use Filament\Pages\Dashboard;
+use Filament\Panel;
+use Filament\PanelProvider;
+use Filament\Support\Colors\Color;
+use Filament\Widgets\AccountWidget;
+use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class NasabahPanelProvider extends PanelProvider
 {
@@ -36,6 +37,8 @@ class NasabahPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Green,
             ])
+            ->topNavigation()
+            ->databaseNotifications()
             ->spa()
             ->profile(EditProfile::class, false)
             ->discoverResources(in: app_path('Filament/Nasabah/Resources'), for: 'App\Filament\Nasabah\Resources')
@@ -45,7 +48,7 @@ class NasabahPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Nasabah/Widgets'), for: 'App\Filament\Nasabah\Widgets')
             ->widgets([
-                AccountWidget::class,
+                // AccountWidget::class,
                 // FilamentInfoWidget::class,
             ])
             ->middleware([
@@ -58,6 +61,7 @@ class NasabahPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                // EnsureUserIsRegularUser::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
@@ -68,11 +72,10 @@ class NasabahPanelProvider extends PanelProvider
             ->favicon(asset('images/favicon.png'))
             ->navigationItems([
                 NavigationItem::make('Halaman Utama')
-                    ->url('/') // redirect ke home
+                    ->url('/')
                     ->icon('heroicon-o-arrow-top-right-on-square')
-                    ->group('Links') // opsional
-                    ->sort(4)
-                    ->openUrlInNewTab(), // kalo mau new tab
+                    // ->group('Links')
+                    ->sort(4),
             ]);
     }
 }

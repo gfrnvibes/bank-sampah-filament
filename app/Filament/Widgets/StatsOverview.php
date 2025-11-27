@@ -6,6 +6,7 @@ use App\Models\WasteSale;
 use App\Models\WasteDeposit;
 use App\Models\BalanceWithdrawal;
 use App\Models\TransactionHistory;
+use App\Models\User;
 use Filament\Support\Enums\IconPosition;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -45,6 +46,10 @@ class StatsOverview extends StatsOverviewWidget
             // Total Berat Sampah Terkumpul
             Stat::make('Berat Sampah Terkumpul', number_format(WasteDeposit::sum('total_weight'), 0, '.', '.').' Kg')
                 ->color('danger'),
+            
+            // Total User Aktif
+            Stat::make('Nasabah Aktif', User::where('is_active', true)->count())
+                ->color('primary'),
         ];
     }
 }

@@ -27,7 +27,7 @@ class WasteDepositResource extends Resource
     protected static ?string $navigationLabel = 'Penyetoran Sampah';
     protected static ?string $slug = 'penyetoran-sampah';
     protected static ?string $pluralModelLabel = 'Penyetoran Sampah';
-    protected static string|UnitEnum|null $navigationGroup = 'Transaksi';
+    // protected static string|UnitEnum|null $navigationGroup = 'Transaksi';
 
     protected static ?int $navigationSort = 1;
 

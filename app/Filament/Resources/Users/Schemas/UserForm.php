@@ -38,7 +38,6 @@ class UserForm
                                 ->label('No. Telepon')
                                 ->tel()
                                 ->numeric()
-                                ->rule('integer')
                                 ->minLength(10)
                                 ->maxLength(13),
 

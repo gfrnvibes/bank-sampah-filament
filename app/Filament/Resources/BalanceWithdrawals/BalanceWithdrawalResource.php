@@ -33,7 +33,7 @@ use App\Filament\Resources\BalanceWithdrawals\Widgets\LatestBalanceWithdrawal;
 class BalanceWithdrawalResource extends Resource
 {
     protected static ?string $model = BalanceWithdrawal::class;
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Banknotes;
     protected static ?string $navigationLabel = 'Penarikan Saldo';

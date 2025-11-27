@@ -37,7 +37,7 @@ class BalanceWithdrawalResource extends Resource
     protected static ?string $navigationLabel = 'Penarikan Saldo';
     protected static ?string $slug = 'penarikan-saldo';
     protected static ?string $pluralModelLabel = 'Penarikan Saldo';
-    protected static string|UnitEnum|null $navigationGroup = 'Transaksi';
+    // protected static string|UnitEnum|null $navigationGroup = 'Transaksi';
 
     protected static ?int $navigationSort = 2;
 

@@ -36,7 +36,7 @@ class TransactionHistoryResource extends Resource
     protected static ?string $navigationLabel = 'Riwayat Transaksi';
     protected static ?string $slug = 'riwayat-transaksi';
     protected static ?string $pluralModelLabel = 'Riwayat Transaksi';
-    protected static string|UnitEnum|null $navigationGroup = 'Transaksi';
+    // protected static string|UnitEnum|null $navigationGroup = 'Transaksi';
 
     protected static ?int $navigationSort = 3;
 

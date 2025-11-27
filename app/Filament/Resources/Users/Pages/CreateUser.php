@@ -3,7 +3,10 @@
 namespace App\Filament\Resources\Users\Pages;
 
 use App\Filament\Resources\Users\UserResource;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Support\Icons\Heroicon;
 
 class CreateUser extends CreateRecord
 {
@@ -12,5 +15,18 @@ class CreateUser extends CreateRecord
     public function getTitle(): string
     {
         return 'Buat Nasabah Baru';
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {   
+        $recipient = auth()->user();
+
+        Notification::make()
+            ->title( 'Nasabah Baru: ' . $recipient->name)
+            ->body('Berhasil Terdaftar')
+            ->icon(Heroicon::User)
+            ->sendToDatabase($recipient);
+
+        return $data;
     }
 }
