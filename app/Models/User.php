@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -17,7 +18,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = ['name', 'nik', 'email', 'password', 'phone', 'dusun', 'rt', 'rw', 'age', 'avatar', 'no_rek', 'is_active', 'balance'];
+    protected $fillable = ['name', 'nik', 'email', 'password', 'phone', 'dusun', 'rt', 'rw', 'age', 'avatar', 'no_rek', 'is_active', 'balance', 'avatar_url'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -62,5 +63,11 @@ class User extends Authenticatable
     public function transactionHistories()
     {
         return $this->hasMany(TransactionHistory::class);
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        $avatarColumn = config('filament-edit-profile.avatar_column', 'avatar_url');
+        return $this->$avatarColumn ? Storage::url($this->$avatarColumn) : null;
     }
 }

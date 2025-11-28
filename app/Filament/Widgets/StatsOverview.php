@@ -2,14 +2,19 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\WasteSale;
-use App\Models\WasteDeposit;
 use App\Models\BalanceWithdrawal;
 use App\Models\TransactionHistory;
 use App\Models\User;
+use App\Models\WasteDeposit;
+use App\Models\WasteSale;
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
 use Filament\Support\Enums\IconPosition;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Database\Eloquent\Builder;
 
 class StatsOverview extends StatsOverviewWidget
 {
@@ -20,21 +25,21 @@ class StatsOverview extends StatsOverviewWidget
             // Waste Sale Total Income - BalanceWithdrawal Total Amount
             Stat::make('Saldo Bank Sampah', 
             'Rp ' . number_format(WasteSale::sum('total_income') - BalanceWithdrawal::where('status', 'completed')->sum('amount'), 0, '.', '.'))
-                ->description('32k increase')
+                // ->description('32k increase')
                 ->color('success')
                 ->chart([7, 2, 10, 3, 15, 4, 17])
                 ->descriptionIcon('heroicon-m-arrow-trending-up', IconPosition::Before),
             
             // Outcome dari transaction history
             Stat::make('Pengeluaran', 'Rp ' . number_format(BalanceWithdrawal::where('status', 'completed')->sum('amount'), 0, '.', '.'))
-                ->description('12k decrease')
+                // ->description('12k decrease')
                 ->chart([7, 2, 10, 3, 15, 4, 17])
                 ->color('danger')
                 ->descriptionIcon('heroicon-m-arrow-trending-down', IconPosition::Before),
 
             
             Stat::make('Total Transaksi', number_format(TransactionHistory::count(), 0, '.', '.'))
-                ->description('12k transaksi')
+                // ->description('12k transaksi')
                 ->chart([7, 2, 10, 3, 15, 4, 17])
                 ->color('info')
                 ->descriptionIcon('heroicon-m-arrow-trending-up', IconPosition::Before),

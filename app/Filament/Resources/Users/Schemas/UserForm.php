@@ -31,17 +31,26 @@ class UserForm
                                 ->label('NIK')
                                 ->required()
                                 ->numeric()
+                                ->string()
+                                ->rule('string')
                                 ->rule('digits:16')
-                                ->maxLength(16),
+                                ->unique('users', 'nik', ignoreRecord: true)
+                                ->validationMessages([
+                                    'unique' => 'NIK ini sudah terdaftar.',
+                                    'digits' => 'NIK harus terdiri dari 16 digit.',
+                                ]),
 
                         TextInput::make('phone')
                                 ->label('No. Telepon')
                                 ->tel()
                                 ->numeric()
                                 ->minLength(10)
-                                ->maxLength(13),
+                                ->maxLength(13)
+                                ->unique('users', 'phone', ignoreRecord: true)
+                                ->validationMessages([
+                                    'unique' => 'No. Telepon ini sudah terdaftar.',
+                                ]),
 
-                        // Dusun + RT + RW dalam 1 baris
                         Grid::make(3)->schema([
                             TextInput::make('dusun')
                                 ->label('Dusun'),
@@ -65,7 +74,11 @@ class UserForm
                         TextInput::make('email')
                             ->label('Email')
                             ->email()
-                            ->required(),
+                            ->required()
+                            ->unique('users', 'email', ignoreRecord: true)
+                            ->validationMessages([
+                                'unique' => 'Email ini sudah terdaftar.',
+                            ]),
 
                         // Password tetap menampilkan nilai lama
                         TextInput::make('password')
@@ -76,9 +89,9 @@ class UserForm
                             )
                             ->required(fn($record) => $record === null),
 
-                        Toggle::make('is_active')
-                                ->label('Status Akun')
-                                ->required(),
+                        // Toggle::make('is_active')
+                        //         ->label('Status Akun')
+                        //         ->required(),
 
                         FileUpload::make('avatar')
                             ->image() // WAJIB untuk preview

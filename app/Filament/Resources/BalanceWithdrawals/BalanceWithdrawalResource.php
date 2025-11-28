@@ -2,33 +2,34 @@
 
 namespace App\Filament\Resources\BalanceWithdrawals;
 
-use UnitEnum;
-use BackedEnum;
-use App\Models\User;
-use Filament\Tables\Table;
-use Filament\Actions\Action;
-use Filament\Schemas\Schema;
-use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
-use Filament\Resources\Resource;
-use App\Models\BalanceWithdrawal;
-use Filament\Actions\ActionGroup;
-use App\Models\TransactionHistory;
-use Filament\Actions\DeleteAction;
-use Filament\Tables\Filters\Filter;
-use Filament\Support\Icons\Heroicon;
-use Filament\Actions\BulkActionGroup;
-use Filament\Forms\Components\Select;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Enums\FiltersLayout;
-use Filament\Forms\Components\DatePicker;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Infolists\Components\TextEntry;
-use App\Filament\Widgets\LatestBalanceWithdrawals;
 use App\Filament\Resources\BalanceWithdrawals\Pages\ManageBalanceWithdrawals;
 use App\Filament\Resources\BalanceWithdrawals\Widgets\LatestBalanceWithdrawal;
+use App\Filament\Widgets\LatestBalanceWithdrawals;
+use App\Models\BalanceWithdrawal;
+use App\Models\TransactionHistory;
+use App\Models\User;
+use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 
 class BalanceWithdrawalResource extends Resource
 {
@@ -45,8 +46,6 @@ class BalanceWithdrawalResource extends Resource
     {
         return static::getModel()::where('status', 'pending')->orWhere('status', 'accepted')->count();
     }
-
-
 
     public static function form(Schema $schema): Schema
     {
@@ -172,9 +171,9 @@ class BalanceWithdrawalResource extends Resource
                     })
                     ->icon(fn(string $state): ?string => match ($state) {
                         'pending' => 'heroicon-o-clock',
-                        'accepted' => 'heroicon-o-information-circle',
+                        'accepted' => 'heroicon-o-check-circle',
                         'rejected' => 'heroicon-o-x-circle',
-                        'completed' => 'heroicon-o-check-circle',
+                        'completed' => 'heroicon-s-check-badge',
                         default => null,
                     }),
                 TextColumn::make('updated_at')
@@ -228,7 +227,7 @@ class BalanceWithdrawalResource extends Resource
                             $record->status = 'accepted';
                             $record->save();
                         })
-                        ->icon('heroicon-o-information-circle')
+                        ->icon('heroicon-o-check-circle')
                         ->color('primary')
                         ->visible(fn(BalanceWithdrawal $record): bool => $record->status === 'pending'),
                     Action::make('completed')
@@ -283,8 +282,69 @@ class BalanceWithdrawalResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+
+                    BulkAction::make('accept')
+                        ->label('Accept')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                $record->update(['status' => 'accepted']);
+                            }
+                        })
+                        ->icon('heroicon-o-information-circle')
+                        ->color('primary')
+                        ->visible(
+                            fn($records) =>
+                            $records->every(fn($r) => $r->status === 'pending')
+                        ),
+
+                    BulkAction::make('completed')
+                        ->label('Complete')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                $record->update(['status' => 'completed']);
+
+                                $user = $record->user;
+                                $balanceBefore = $user->balance;
+                                $user->balance -= $record->amount;
+                                $user->save();
+
+                                TransactionHistory::create([
+                                    'user_id' => $user->id,
+                                    'type' => 'withdrawal',
+                                    'amount' => $record->amount,
+                                    'balance_before' => $balanceBefore,
+                                    'balance_after' => $user->balance,
+                                    // 'reference_type' => BalanceWithdrawal::class,
+                                    'reference_id' => $record->id,
+                                ]);
+                            }
+                        })
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->visible(
+                            fn($records) =>
+                            $records->every(fn($r) => $r->status === 'accepted')
+                        ),
+
+                    BulkAction::make('reject')
+                        ->label('Reject')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                $record->update(['status' => 'rejected']);
+                            }
+                        })
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->visible(
+                            fn($records) =>
+                            $records->every(fn($r) => $r->status === 'pending')
+                        ),
                 ]),
             ]);
+
     }
 
     public static function getPages(): array

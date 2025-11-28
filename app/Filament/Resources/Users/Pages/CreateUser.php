@@ -21,8 +21,10 @@ class CreateUser extends CreateRecord
     {   
         $recipient = auth()->user();
 
+        $nasabahBaru = $data['name'] ?? 'Nasabah Baru';
+
         Notification::make()
-            ->title( 'Nasabah Baru: ' . $recipient->name)
+            ->title( 'Nasabah Baru: ' . $nasabahBaru)
             ->body('Berhasil Terdaftar')
             ->icon(Heroicon::User)
             ->sendToDatabase($recipient);

@@ -31,7 +31,9 @@ class UserInfolist
                         ]),
                         Grid::make(2)->schema([
                             TextEntry::make('nik')
-                                ->label('NIK'),
+                                ->label('NIK')
+                                // format agar NIK tampil tidak 
+                                ,
                             TextEntry::make('phone')
                                 ->label('No. Telepon'),
                         ]),
