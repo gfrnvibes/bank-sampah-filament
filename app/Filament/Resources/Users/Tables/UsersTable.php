@@ -42,35 +42,32 @@ class UsersTable
                 TextColumn::make('email')
                     ->label('Email')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
                 TextColumn::make('nik')
                     ->label('NIK')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
                 TextColumn::make('phone')
                     ->label('No. Telepon')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
                 TextColumn::make('dusun')
                     ->label('Dusun')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('rt')
                     ->label('RT')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('rw')
                     ->label('RW')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('age')
                     ->label('Usia')
-                    ->searchable(),
-                TextColumn::make('no_rek')
-                    ->label('No. Rekening')
+                    ->suffix(' Tahun')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                IconColumn::make('is_active')
-                    ->label('Aktif')
-                    ->alignCenter()
-                    ->boolean(),
+                    ->toggleable(),
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime()

@@ -53,9 +53,9 @@ class UserInfolist
                              TextEntry::make('email')
                                  ->label('Email'),
      
-                             IconEntry::make('is_active')
-                                ->label('Status Akun')
-                                 ->boolean(),
+                            //  IconEntry::make('is_active')
+                            //     ->label('Status Akun')
+                            //      ->boolean(),
                          ]),
                         ImageEntry::make('avatar')
                                 ->label('Foto Profil'),

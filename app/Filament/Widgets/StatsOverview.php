@@ -53,7 +53,7 @@ class StatsOverview extends StatsOverviewWidget
                 ->color('danger'),
             
             // Total User Aktif
-            Stat::make('Nasabah Aktif', User::where('is_active', true)->count())
+            Stat::make('Nasabah Aktif', User::where('id', '!=', 1)->count())
                 ->color('primary'),
         ];
     }
