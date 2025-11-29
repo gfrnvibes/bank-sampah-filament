@@ -9,11 +9,13 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use UnitEnum;
@@ -43,6 +45,11 @@ class WasteTypeResource extends Resource
                     ->prefix('Rp')
                     ->required()
                     ->numeric(),
+                FileUpload::make('image')
+                    ->label('Gambar')
+                    ->image()
+                    ->maxSize(2048)
+                    ->visibility('public'),
                 Textarea::make('description')
                     ->label('Deskripsi')
                     ->columnSpanFull(),
@@ -53,15 +60,23 @@ class WasteTypeResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('image')
+                    ->label('Gambar')
+                    // ->imageWidth(200)
+                    ->visibility('public'),
                 TextColumn::make('name')
+                    ->label('Nama')
                     ->searchable(),
                 TextColumn::make('price_per_kg')
+                    ->label('Harga / Kg')
                     ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
                     ->badge()
                     ->size('xl')
                     ->color('success')
                     ->sortable(),
-                TextColumn::make('description'),
+                TextColumn::make('description')
+                    ->label('Deskripsi')
+                    ->searchable(), 
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

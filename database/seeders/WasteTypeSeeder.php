@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\WasteType;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class WasteTypeSeeder extends Seeder
 {
@@ -12,20 +13,34 @@ class WasteTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        // Buat jenis sampah Besi = 3000, Kardus = 2000, Kaleng = 1000, dari Waste Type
-        \App\Models\WasteType::create([
-            'name' => 'Besi',
-            'price_per_kg' => 3000,
+        WasteType::create([
+            'name' => 'Plastik',
+            'price_per_kg' => 3500,
+            'description' => 'Botol, gelas plastik, HDPE, PP.'
         ]);
 
-        \App\Models\WasteType::create([
-            'name' => 'Kardus',
-            'price_per_kg' => 2000,
+        WasteType::create([
+            'name' => 'Kertas',
+            'price_per_kg' => 7000,
+            'description' => 'Koran, kardus, buku, dan berbagai jenis kertas kering.'
         ]);
 
-        \App\Models\WasteType::create([
-            'name' => 'Kaleng',
+        WasteType::create([
+            'name' => 'Logam',
             'price_per_kg' => 1000,
+            'description' => 'Kaleng, besi, aluminium, dan logam layak daur ulang lainnya.'
+        ]);
+
+        WasteType::create([
+            'name' => 'Kaca',
+            'price_per_kg' => 1500,
+            'description' => 'Botol kaca, pecahan kaca.'
+        ]);
+
+        WasteType::create([
+            'name' => 'Elektronik',
+            'price_per_kg' => 12000,
+            'description' => 'HP rusak, kabel, motherboar, dan lain-lain.'
         ]);
     }
 }

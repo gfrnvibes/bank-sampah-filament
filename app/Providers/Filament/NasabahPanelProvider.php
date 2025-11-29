@@ -7,6 +7,7 @@ use Filament\PanelProvider;
 use Filament\Enums\ThemeMode;
 use Filament\Pages\Dashboard;
 use Filament\Navigation\MenuItem;
+use Filament\Support\Enums\Width;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Filament\Auth\Pages\EditProfile;

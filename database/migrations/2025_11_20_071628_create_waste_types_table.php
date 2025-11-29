@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('price_per_kg', 10, 2);
             $table->text('description')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

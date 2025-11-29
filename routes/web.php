@@ -1,7 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Livewire\Panduan;
+use Illuminate\Support\Facades\Route;
+
 
 // Route::get('/', function () {
 //     return view('livewire/home');
@@ -16,3 +18,10 @@ Route::post('/logout', function () {
 
     return redirect('/');
 })->name('logout');
+
+Route::get('price-list', \App\Livewire\PriceList::class)->name('price-list');
+Route::get('panduan', Panduan::class)->name('panduan');
+
+Route::get('admin-login', \App\Filament\Pages\Auth\AdminLogin::class)->name('admin.login');
+Route::get('nasabah-login', \App\Filament\Nasabah\Pages\Auth\NasabahLogin::class)->name('nasabah.login');
+Route::get('nasabah-register', \App\Filament\Nasabah\Pages\Auth\NasabahRegister::class)->name('nasabah.register');

@@ -13,11 +13,10 @@ class WasteType extends Model
         'name',
         'price_per_kg',
         'description',
-        'is_active'
+        'image'
     ];
 
     protected $casts = [
         'price_per_kg' => 'decimal:2',
-        'is_active' => 'boolean'
     ];
 }

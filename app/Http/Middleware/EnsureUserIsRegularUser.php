@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Filament\Facades\Filament;
+use Filament\Http\Middleware\AuthenticateSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,8 +18,13 @@ class EnsureUserIsRegularUser
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Jika belum login, tampilkan halaman login nasabah
+        if (!Auth::check()) {
+            return redirect()->route(Filament::getLoginUrl());
+        }
+
         if (!Auth::check() || Auth::user()->id ===   1) {
-            abort(403);
+            abort(403, 'dilarang');
         }
         return $next($request);
     }

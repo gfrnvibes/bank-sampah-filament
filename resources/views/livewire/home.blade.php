@@ -1,60 +1,12 @@
 <div>
-    <!-- THEME (warna & tipografi konsisten) -->
-    <style>
-        :root{
-            --brand-primary:#2F9E44;   /* hijau utama */
-            --brand-primary-600:#2A8A3D;
-            --brand-deep:#1B4332;      /* hijau hutan */
-            --brand-accent:#FFD166;    /* kuning hangat */
-            --brand-soft:#F3F8F4;      /* bg lembut */
-            --brand-muted:#6C757D;     /* text sekunder */
-        }
-        .bg-brand-soft{ background-color: var(--brand-soft); }
-        .text-brand{ color: var(--brand-deep) !important; }
-        .btn-brand{ background: var(--brand-primary); color:#fff; border:none; }
-        .btn-brand:hover{ background: var(--brand-primary-600); color:#fff; }
-        .btn-accent{ background: var(--brand-accent); color:#111; border:none; }
-        .btn-accent:hover{ filter: brightness(.95); color:#111; }
-        .badge-desa{ background: var(--brand-accent); color:#111; font-weight:700; }
-        .section-py{ padding-top: 4.5rem; padding-bottom: 4.5rem; }
-        @media (min-width:992px){ .section-py{ padding-top: 6rem; padding-bottom: 6rem; } }
-
-        .section-title{ letter-spacing:.2px; }
-        .section-subtitle{ color: var(--brand-muted); }
-
-        .feature-icon{
-            width:64px; height:64px; display:flex; align-items:center; justify-content:center;
-        }
-        .step-number{
-            width:44px; height:44px; font-weight:700;
-        }
-
-        /* Hero */
-        .hero{
-            background: radial-gradient(1200px 600px at -10% -20%, rgba(47,158,68,.15), transparent),
-                        radial-gradient(1200px 600px at 110% -10%, rgba(255,209,102,.18), transparent),
-                        linear-gradient(180deg, #fff, var(--brand-soft));
-        }
-        .hero-card{
-            background:#fff; border:1px solid #EDF3EE;
-        }
-
-        /* Cards */
-        .card-clean{ border:1px solid #E7EEE9; }
-
-        /* Stats */
-        .stats{
-            background: linear-gradient(135deg, var(--brand-primary), var(--brand-deep));
-        }
-    </style>
 
     <!-- TOP BAR IDENTITAS DESA -->
-    <div class="py-2 bg-brand-soft border-bottom">
+    {{-- <div class="py-2 bg-brand-soft border-bottom">
         <div class="container d-flex flex-wrap align-items-center gap-2">
             <span class="badge badge-desa rounded-pill px-3 py-2">Resmi Desa Tanggulun</span>
             <span class="text-brand fw-semibold">Kec. Kadungora, Kab. Garut</span>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Hero Section -->
     <section class="section-py hero">
@@ -213,22 +165,28 @@
     <section class="section-py stats text-white">
         <div class="container">
             <div class="row text-center">
-                <div class="col-6 col-md-3 mb-4 mb-md-0">
-                    <div class="display-6 fw-bold">500+</div>
+                <div class="col-6 col-md-4 mb-4 mb-md-0">
+                    <div class="display-6 fw-bold">
+                        {{ App\Models\User::where('id', '!=', 1)->count() }}
+                    </div>
                     <p class="mb-0">Anggota</p>
                 </div>
-                <div class="col-6 col-md-3 mb-4 mb-md-0">
-                    <div class="display-6 fw-bold">10+</div>
-                    <p class="mb-0">Ton Sampah</p>
+                <div class="col-6 col-md-4 mb-4 mb-md-0">
+                    <div class="display-6 fw-bold">
+                        {{ App\Models\WasteDeposit::sum('total_weight') }}
+                    </div>
+                    <p class="mb-0">Kilo Sampah</p>
                 </div>
-                <div class="col-6 col-md-3 mb-4 mb-md-0">
-                    <div class="display-6 fw-bold">100+</div>
+                <div class="col-6 col-md-4 mb-4 mb-md-0">
+                    <div class="display-6 fw-bold">
+                        {{ App\Models\WasteType::count() }}
+                    </div>
                     <p class="mb-0">Jenis Sampah</p>
                 </div>
-                <div class="col-6 col-md-3">
+                {{-- <div class="col-6 col-md-3">
                     <div class="display-6 fw-bold">24/7</div>
                     <p class="mb-0">Layanan</p>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
