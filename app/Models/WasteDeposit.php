@@ -12,7 +12,7 @@ class WasteDeposit extends Model
     protected $fillable = ['user_id', 'waste_items', 'total_weight', 'total_amount', 'notes'];
 
     protected $casts = [
-        'waste_items' => 'array',
+        'waste_items' => 'json',
         'total_weight' => 'float',
         'total_amount' => 'float',
     ];

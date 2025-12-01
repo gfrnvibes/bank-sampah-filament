@@ -15,7 +15,7 @@ class WasteSale extends Model
     ];
 
     protected $casts = [
-        'waste_items' => 'array',
+        'waste_items' => 'json',
         'total_weight' => 'float',
         'total_income' => 'float',
     ];
