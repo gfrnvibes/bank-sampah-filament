@@ -173,7 +173,8 @@
                 </div>
                 <div class="col-6 col-md-4 mb-4 mb-md-0">
                     <div class="display-6 fw-bold">
-                        {{ App\Models\WasteDeposit::sum('total_weight') }}
+                        {{-- format number to 2 decimal places --}}
+                        {{ number_format(App\Models\WasteDeposit::sum('total_weight'), 0) }}
                     </div>
                     <p class="mb-0">Kilo Sampah</p>
                 </div>

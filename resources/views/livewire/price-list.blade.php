@@ -10,7 +10,7 @@
     <!-- CONTENT -->
     <section class="container pb-5">
 
-        <div class="row g-5">
+        <div class="row g-4">
             @forelse ($items as $item)
                 <div class="col-md-4 col-lg-3">
                     <div class="card h-100 shadow-sm border-0" style="transition: .3s;">

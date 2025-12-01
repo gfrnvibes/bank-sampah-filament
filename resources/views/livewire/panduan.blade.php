@@ -14,39 +14,45 @@
     <section id="panduan" class="py-5">
         <div class="container">
 
-            <h2 class="fw-semibold text-center mb-4">Kategori Sampah yang Diterima</h2>
+            <h2 class="fw-semibold text-center mb-4">Jenis Sampah yang Diterima</h2>
 
-            <div class="row g-4 mb-5">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
+        <div class="row g-4">
+            @forelse ($items as $item)
+                <div class="col-md-4 col-lg-3">
+                    <div class="card h-100 shadow-sm border-0" style="transition: .3s;">
+
+                        <div class="ratio ratio-4x3">
+
+                            @if ($item->image)
+                                <img src="{{ asset('storage/' . $item->image) }}" class="w-100 h-100 object-fit-cover"
+                                    alt="{{ $item->name }}">
+                            @else
+                                <div class="d-flex justify-content-center align-items-center bg-danger text-white w-100 h-100"
+                                    style="font-size: 1.3rem; font-weight: 600;">
+                                    {{ $item->name }}
+                                </div>
+                            @endif
+
+                        </div>
+
+
                         <div class="card-body text-center">
-                            <i class="fa-solid fa-bottle-water fa-3x text-primary mb-3"></i>
-                            <h5 class="fw-bold">Plastik</h5>
-                            <p class="text-muted">Botol, gelas plastik, kantong, dan jenis plastik bersih lainnya.</p>
+                            <h5 class="fw-bold">{{ $item->name }}</h5>
+                            <p class="text-muted small">{{ $item->description }}</p>
+
+                            <span class="badge bg-success fs-6">
+                                Rp {{ number_format($item->price_per_kg, 0, ',', '.') }} / kg
+                            </span>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <i class="fa-solid fa-newspaper fa-3x text-warning mb-3"></i>
-                            <h5 class="fw-bold">Kertas</h5>
-                            <p class="text-muted">Koran, kardus, buku, dan berbagai jenis kertas kering.</p>
-                        </div>
-                    </div>
+            @empty
+                <div class="col-12 text-center py-5 text-muted">
+                    Belum ada data jenis sampah.
                 </div>
+            @endforelse
+        </div>
 
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <i class="fa-solid fa-gear fa-3x text-danger mb-3"></i>
-                            <h5 class="fw-bold">Logam</h5>
-                            <p class="text-muted">Kaleng, besi, aluminium, dan logam layak daur ulang lainnya.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 

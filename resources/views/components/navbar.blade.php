@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mx-auto gap-3 mb-2 mb-lg-0">
                 <x-nav-link :active="request()->routeIs('/')" href="/">Home</x-nav-link>
-                <x-nav-link :active="request()->routeIs('price-list')" href="{{ route('price-list') }}">Daftar Harga</x-nav-link>
+                {{-- <x-nav-link :active="request()->routeIs('price-list')" href="{{ route('price-list') }}">Daftar Harga</x-nav-link> --}}
                 <x-nav-link :active="request()->routeIs('panduan')" href="{{ route('panduan') }}">Panduan</x-nav-link>
                 <x-nav-link :active="request()->routeIs('/nasabah')" href="/nasabah">Dashboard</x-nav-link>
                 {{-- <x-nav-link :active="request()->routeIs()" href="">Riwayat</x-nav-link> --}}
