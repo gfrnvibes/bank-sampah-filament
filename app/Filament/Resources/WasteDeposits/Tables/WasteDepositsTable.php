@@ -29,7 +29,9 @@ class WasteDepositsTable
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('waste_items')
-                    ->label('Jenis Sampah')->formatStateUsing(fn($state) => json_encode($state)),
+                    ->label('Jenis Sampah')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->formatStateUsing(fn($state) => json_encode($state)),
                 TextColumn::make('total_weight')
                     ->label('Total Berat')
                     ->numeric()

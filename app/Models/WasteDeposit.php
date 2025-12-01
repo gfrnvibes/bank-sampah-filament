@@ -9,7 +9,7 @@ use App\Models\TransactionHistory;
 
 class WasteDeposit extends Model
 {
-    protected $fillable = ['user_id', 'waste_items', 'total_weight', 'total_amount', 'status', 'notes'];
+    protected $fillable = ['user_id', 'waste_items', 'total_weight', 'total_amount', 'notes'];
 
     protected $casts = [
         'waste_items' => 'array',
