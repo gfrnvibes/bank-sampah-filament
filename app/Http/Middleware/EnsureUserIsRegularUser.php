@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Filament\Nasabah\Pages\Auth\NasabahLogin;
 use Closure;
 use Filament\Facades\Filament;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -20,8 +21,10 @@ class EnsureUserIsRegularUser
     {
         // Jika belum login, tampilkan halaman login nasabah
         if (!Auth::check()) {
-            return redirect()->route(Filament::getLoginUrl());
+            return redirect()->route('nasabah.login');
         }
+
+        // Jika sudah login Admin
 
         if (!Auth::check() || Auth::user()->id ===   1) {
             abort(403, 'dilarang');

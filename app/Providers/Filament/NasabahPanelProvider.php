@@ -67,7 +67,7 @@ class NasabahPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                // EnsureUserIsRegularUser::class,
+                EnsureUserIsRegularUser::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
