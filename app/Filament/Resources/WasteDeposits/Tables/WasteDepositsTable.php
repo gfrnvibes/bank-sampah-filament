@@ -127,7 +127,7 @@ class WasteDepositsTable
                 // ViewAction::make(),
                 ActionGroup::make([
                     ViewAction::make(),
-                    EditAction::make(),
+                    // EditAction::make(),
                 ]),
             ])
             ->toolbarActions([

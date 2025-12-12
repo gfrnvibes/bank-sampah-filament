@@ -24,7 +24,7 @@ class StatsOverview extends StatsOverviewWidget
             ->color('success'),
 
              // number format with KG currency
-            Stat::make('Berat Sampah Terkumpul',
+            Stat::make('Berat Sampah Disetor',
                 number_format(WasteDeposit::where('user_id', $userId)
                     ->sum('total_weight'), 0, ',', '.') . ' Kg'
             )

@@ -27,29 +27,31 @@ class UserForm
                                 ->numeric()
                                 ->rule('integer'),
                         ]),
-                        TextInput::make('nik')
-                                ->label('NIK')
-                                ->required()
-                                ->numeric()
-                                ->string()
-                                ->rule('string')
-                                ->rule('digits:16')
-                                ->unique('users', 'nik', ignoreRecord: true)
-                                ->validationMessages([
-                                    'unique' => 'NIK ini sudah terdaftar.',
-                                    'digits' => 'NIK harus terdiri dari 16 digit.',
-                                ]),
-
-                        TextInput::make('phone')
-                                ->label('No. Telepon')
-                                ->tel()
-                                ->numeric()
-                                ->minLength(10)
-                                ->maxLength(13)
-                                ->unique('users', 'phone', ignoreRecord: true)
-                                ->validationMessages([
-                                    'unique' => 'No. Telepon ini sudah terdaftar.',
-                                ]),
+                        Grid::make(2)->schema([
+                            TextInput::make('nik')
+                                    ->label('NIK')
+                                    ->required()
+                                    ->numeric()
+                                    ->string()
+                                    ->rule('string')
+                                    ->rule('digits:16')
+                                    ->unique('users', 'nik', ignoreRecord: true)
+                                    ->validationMessages([
+                                        'unique' => 'NIK ini sudah terdaftar.',
+                                        'digits' => 'NIK harus terdiri dari 16 digit.',
+                                    ]),
+    
+                            TextInput::make('phone')
+                                    ->label('No. Telepon')
+                                    ->tel()
+                                    ->numeric()
+                                    ->minLength(10)
+                                    ->maxLength(13)
+                                    ->unique('users', 'phone', ignoreRecord: true)
+                                    ->validationMessages([
+                                        'unique' => 'No. Telepon ini sudah terdaftar.',
+                                    ]),
+                        ]),
 
                         Grid::make(3)->schema([
                             TextInput::make('dusun')
@@ -64,9 +66,11 @@ class UserForm
                                 ->maxLength(3),
                         ]),
 
-                        // TextInput::make('no_rek')
-                        //     ->numeric()
-                        //     ->rule('integer'),
+                        FileUpload::make('foto_ktp')
+                                ->label('Foto KTP')
+                                ->image()
+                                ->directory('ktp')
+                                ->visibility('public'),
                     ]),
 
                 Section::make('Akun')
@@ -98,7 +102,6 @@ class UserForm
                             ->directory('avatars')
                             ->label('Foto Profil')
                             ->visibility('public')
-
                     ]),
             ])
             ->columns(2);

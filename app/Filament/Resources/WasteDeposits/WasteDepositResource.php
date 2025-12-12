@@ -62,7 +62,7 @@ class WasteDepositResource extends Resource
             'index' => ListWasteDeposits::route('/'),
             'create' => CreateWasteDeposit::route('/create'),
             'view' => ViewWasteDeposit::route('/{record}'),
-            'edit' => EditWasteDeposit::route('/{record}/edit'),
+            // 'edit' => EditWasteDeposit::route('/{record}/edit'),
         ];
     }
 }

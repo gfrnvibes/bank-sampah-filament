@@ -3,13 +3,14 @@
 namespace App\Filament\Nasabah\Pages\Auth;
 
 use App\Models\User;
-use Filament\Auth\Pages\Register;
-use Filament\Forms\Components\TextInput;
-use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Schema;
+use Filament\Auth\Pages\Register;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\FileUpload;
 
 class NasabahRegister extends Register
 {
@@ -31,6 +32,13 @@ class NasabahRegister extends Register
                 $this->getEmailFormComponent(),
                 $this->getPasswordFormComponent(),
                 $this->getPasswordConfirmationFormComponent(),
+
+                FileUpload::make('foto_ktp')
+                    ->label('Foto KTP')
+                    ->required()
+                    ->directory('ktp')
+                    ->image()
+                    ->visibility('public'),
                 
             ]);
     }

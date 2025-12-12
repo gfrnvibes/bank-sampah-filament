@@ -45,6 +45,9 @@ class UserInfolist
                             TextEntry::make('rw')
                                 ->label('RW'),
                         ]),
+                        ImageEntry::make('foto_ktp')
+                                ->label('Foto KTP')
+                                ->visibility('public'),
                     ]),
 
                 Section::make('Akun')
@@ -58,7 +61,8 @@ class UserInfolist
                             //      ->boolean(),
                          ]),
                         ImageEntry::make('avatar')
-                                ->label('Foto Profil'),
+                                ->label('Foto Profil')
+                                ->visibility('public'),
                         Grid::make(2)->schema([
                             TextEntry::make('created_at')
                                 ->label('Dibuat pada')

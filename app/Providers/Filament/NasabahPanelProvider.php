@@ -86,11 +86,11 @@ class NasabahPanelProvider extends PanelProvider
             ->plugin(
                 FilamentEditProfilePlugin::make()
                     ->shouldRegisterNavigation(false)
-                    ->shouldShowAvatarForm(
-                        value: true,
-                        directory: 'avatars',
-                        rules: 'mimes:jpeg,png|max:1024' 
-                    )
+                    // ->shouldShowAvatarForm(
+                    //     value: true,
+                    //     directory: 'avatars',
+                    //     rules: 'mimes:jpeg,png|max:1024' 
+                    // )
                     ->customProfileComponents([
                             \App\Livewire\CustomProfileComponent::class,
                     ])

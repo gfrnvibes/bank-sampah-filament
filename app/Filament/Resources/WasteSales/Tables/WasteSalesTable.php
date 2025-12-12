@@ -118,7 +118,7 @@ class WasteSalesTable
             ->recordActions([
                  ActionGroup::make([
                     ViewAction::make(),
-                    EditAction::make(),
+                    // EditAction::make(),
                 ]),
             ])
             ->toolbarActions([

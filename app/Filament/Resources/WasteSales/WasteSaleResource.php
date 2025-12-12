@@ -61,7 +61,7 @@ class WasteSaleResource extends Resource
             'index' => ListWasteSales::route('/'),
             'create' => CreateWasteSale::route('/create'),
             'view' => ViewWasteSale::route('/{record}'),
-            'edit' => EditWasteSale::route('/{record}/edit'),
+            // 'edit' => EditWasteSale::route('/{record}/edit'),
         ];
     }
 }

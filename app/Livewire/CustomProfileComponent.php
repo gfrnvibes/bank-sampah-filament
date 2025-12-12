@@ -2,22 +2,23 @@
 
 namespace App\Livewire;
 
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Section;
+use Livewire\Component;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\View\View;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Concerns\InteractsWithForms;
 use Joaopaulolndev\FilamentEditProfile\Concerns\HasSort;
-use Livewire\Component;
 
 class CustomProfileComponent extends Component implements HasForms
 {
     use InteractsWithForms;
     use HasSort;
 
-    public ?array $data = [];
+    public $data = [];
 
     protected static int $sort = 0;
 
@@ -29,6 +30,7 @@ class CustomProfileComponent extends Component implements HasForms
             'dusun' => auth()->user()->dusun,
             'rt' => auth()->user()->rt,
             'rw' => auth()->user()->rw,
+            // 'foto_ktp' => auth()->user()->foto_ktp,
         ];
     }
 
@@ -36,30 +38,28 @@ class CustomProfileComponent extends Component implements HasForms
     {
         return $form
             ->schema([
-                Section::make('Identitas (Wajib Diisi)')
+                Section::make('Identitas Pribadi')
                     ->aside()
                     ->description('Silahkan lengkapi data-data berikut ini untuk keperluan administrasi.')
                     ->schema([
-                        TextInput::make('nik')
-                            ->label('NIK')
-                            ->required()
-                            ->rule('digits:16')
-                            ->unique('users', 'nik', ignoreRecord: true)
-                            ->validationMessages([
-                                'unique' => 'NIK ini sudah terdaftar.',
-                            ])
-                            ->maxLength(16),
+                        Grid::make(2)->schema([                            
+                            TextInput::make('nik')
+                                ->label('NIK')
+                                ->rule('digits:16')
+                                ->validationMessages([
+                                    'rule' => 'NIK harus terdiri dari 16 digit.',
+                                ])
+                                ->maxLength(16),
+    
+                            TextInput::make('phone')
+                                ->label('No. Telepon')
+                                ->tel()
+                                ->numeric()
+                                ->minLength(10)
+                                ->maxLength(13),
+                        ]),
 
-                        TextInput::make('phone')
-                            ->label('No. Telepon')
-                            ->tel()
-                            ->required()
-                            ->numeric()
-                            ->minLength(10)
-                            ->maxLength(13),
-
-                        // Dusun + RT + RW dalam 1 baris
-                        Grid::make(3)->schema([
+                        Grid::make(4)->schema([
                             TextInput::make('dusun')
                                 ->label('Dusun')
                                 ->required(),
@@ -73,7 +73,18 @@ class CustomProfileComponent extends Component implements HasForms
                                 ->required()
                                 ->numeric()
                                 ->maxLength(3),
+                            TextInput::make('usia')
+                                ->label('Usia')
+                                ->required()
+                                ->numeric()
+                                ->maxLength(3),
                         ]),
+
+                        FileUpload::make('foto_ktp')
+                            ->label('Foto KTP')
+                            ->directory('ktp')
+                            ->image()
+                            ->visibility('public'),
                     ]),
             ])
             ->statePath('data');
@@ -81,7 +92,6 @@ class CustomProfileComponent extends Component implements HasForms
 
     public function save(): void
     {
-        // Ambil data hasil form (udah valid)
         $data = $this->form->getState();
 
         $user = auth()->user();
@@ -92,9 +102,9 @@ class CustomProfileComponent extends Component implements HasForms
             'dusun' => $data['dusun'],
             'rt' => $data['rt'],
             'rw' => $data['rw'],
+            'foto_ktp' => $data['foto_ktp'],
         ]);
 
-        // Optional notif ala Filament
         \Filament\Notifications\Notification::make()
             ->title('Data berhasil disimpan!')
             ->success()
