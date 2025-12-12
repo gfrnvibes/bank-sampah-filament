@@ -8,6 +8,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
@@ -82,12 +83,14 @@ class WasteSalesTable
                 ->numeric()
                 ->suffix(' Kg')
                 ->color('danger')
+                ->summarize(Sum::make()->label('Jumlah')->suffix(' Kg'))
                 ->sortable(),
             TextColumn::make('total_income')
                 ->label('Total Pemasukan')
                 ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
                 ->badge()
                 ->size('xl')
+                ->summarize(Sum::make()->label('Jumlah')->money('IDR', decimalPlaces: 0, locale: 'id_ID'))
                 ->sortable(),
             TextColumn::make('buyer')
                 ->label('Pembeli')

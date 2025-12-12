@@ -2,17 +2,18 @@
 
 namespace App\Filament\Resources\WasteDeposits\Tables;
 
-use Filament\Actions\ActionGroup;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
+use Filament\Tables\Table;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Table;
+use Filament\Actions\BulkActionGroup;
+use Filament\Forms\Components\Select;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\Summarizers\Sum;
 
 class WasteDepositsTable
 {
@@ -22,6 +23,7 @@ class WasteDepositsTable
             ->columns([
                 TextColumn::make('created_at')
                     ->label('Tanggal')
+                    ->listWithLineBreaks()
                     ->date()
                     ->sortable(),
                 TextColumn::make('user.name')
@@ -89,6 +91,7 @@ class WasteDepositsTable
                     ->suffix(' Kg')
                     ->color('danger')
                     ->alignCenter()
+                    ->summarize(Sum::make()->label('Jumlah')->suffix(' Kg'))
                     ->sortable(),
                 TextColumn::make('total_amount')
                     ->label('Total Pendapatan')
@@ -96,6 +99,7 @@ class WasteDepositsTable
                     ->size('xl')
                     ->color('success')
                     ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
+                    ->summarize(Sum::make()->label('Jumlah')->money('IDR', decimalPlaces: 0, locale: 'id_ID'))
                     ->sortable(),
                 TextColumn::make('notes')
                     ->limit(50)
