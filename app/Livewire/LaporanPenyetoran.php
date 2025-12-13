@@ -148,7 +148,8 @@ class LaporanPenyetoran extends Component implements HasForms, HasTable, HasActi
 
             ])
             ->headerActions([
-                FilamentExportHeaderAction::make('export'),
+                FilamentExportHeaderAction::make('export')
+                    ->disableAdditionalColumns(),
                 // CreateAction::make()
                 //     ->mutateFormDataUsing(fn(array $data): array => WasteDeposit::mutateFormDataBeforeCreate($data))
                 //     ->visible(url()->current() != WasteDepositResource::getUrl('index')),
@@ -159,6 +160,7 @@ class LaporanPenyetoran extends Component implements HasForms, HasTable, HasActi
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                     FilamentExportBulkAction::make('export')
+                        ->disableAdditionalColumns(),
                 ]),
             ]);
     }

@@ -145,7 +145,8 @@ class LaporanPenjualan extends Component implements HasForms, HasTable, HasActio
 
             ])
             ->headerActions([
-                FilamentExportHeaderAction::make('export'),
+                FilamentExportHeaderAction::make('export')
+                    ->disableAdditionalColumns(),
                 // CreateAction::make()
                 //     ->mutateFormDataUsing(fn(array $data): array => WasteDeposit::mutateFormDataBeforeCreate($data))
                 //     ->visible(url()->current() != WasteDepositResource::getUrl('index')),
@@ -156,6 +157,7 @@ class LaporanPenjualan extends Component implements HasForms, HasTable, HasActio
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                     FilamentExportBulkAction::make('export')
+                        ->disableAdditionalColumns(),
                 ]),
             ]);
     }
