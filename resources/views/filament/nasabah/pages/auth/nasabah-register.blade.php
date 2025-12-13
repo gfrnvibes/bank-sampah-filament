@@ -1,5 +1,5 @@
 <x-filament-panels::layout.base>
-    <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    {{-- <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
     
         <div class="card shadow-sm p-4" style="width: 900px; max-width: 95%; border-radius: 1rem;">
     
@@ -15,5 +15,5 @@
     
         </div>
     
-    </div>
+    </div> --}}
 </x-filament-panels::layout.base>

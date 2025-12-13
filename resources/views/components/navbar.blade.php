@@ -26,7 +26,7 @@
 
                 @guest
                     <a href="{{ route('filament.nasabah.auth.login') }}" class="btn btn-light fw-bold">Masuk</a>
-                    <a href="{{ route('filament.nasabah.auth.register') }}" class="btn btn-outline-light">Daftar</a>
+                    <a href="{{ route('nasabah.register') }}" class="btn btn-outline-light">Daftar</a>
                 @endguest
             </div>
         </div>
