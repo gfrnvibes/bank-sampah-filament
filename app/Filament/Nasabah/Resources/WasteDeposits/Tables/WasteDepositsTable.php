@@ -12,6 +12,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\Summarizers\Sum;
 
 class WasteDepositsTable
 {
@@ -34,6 +35,7 @@ class WasteDepositsTable
                     ->size('xl')
                     ->color('success')
                     ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
+                    ->summarize(Sum::make()->money('IDR', decimalPlaces: 0, locale: 'id_ID'))
                     ->sortable(),
                 TextColumn::make('total_weight')
                         ->label('Total Berat')
@@ -41,6 +43,7 @@ class WasteDepositsTable
                         ->color('danger')
                         ->suffix(' Kg')
                         ->alignCenter()
+                        ->summarize(Sum::make()->suffix(' Kg'))
                         ->sortable(),
                 TextColumn::make('waste_items')
                     ->label('Jenis Sampah')

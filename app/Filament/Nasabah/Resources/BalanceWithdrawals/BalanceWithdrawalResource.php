@@ -25,6 +25,7 @@ use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Validation\ValidationException;
 use App\Filament\Nasabah\Resources\BalanceWithdrawals\Pages\ManageBalanceWithdrawals;
 
@@ -136,6 +137,7 @@ class BalanceWithdrawalResource extends Resource
                     ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
                     ->badge()
                     ->size('xxl')
+                    ->summarize(Sum::make()->money('IDR', decimalPlaces: 0, locale: 'id_ID'))
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge()
