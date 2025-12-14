@@ -2,30 +2,31 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
-use App\Models\WasteSale;
-use Filament\Tables\Table;
-use App\Models\WasteDeposit;
-use Filament\Actions\CreateAction;
-use Filament\Tables\Filters\Filter;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Actions\RestoreBulkAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Forms\Components\DatePicker;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Tables\Filters\TrashedFilter;
-use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Actions\Concerns\InteractsWithActions;
-use App\Filament\Resources\WasteSales\WasteSaleResource;
-use App\Filament\Resources\WasteDeposits\WasteDepositResource;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
+use App\Filament\Resources\WasteDeposits\WasteDepositResource;
+use App\Filament\Resources\WasteSales\WasteSaleResource;
+use App\Models\WasteDeposit;
+use App\Models\WasteSale;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Columns\ColumnGroup;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Livewire\Component;
 
 class LaporanPenjualan extends Component implements HasForms, HasTable, HasActions
 {
@@ -44,60 +45,26 @@ class LaporanPenjualan extends Component implements HasForms, HasTable, HasActio
                     ->label('Tanggal')
                     ->date()
                     ->sortable(),
-            TextColumn::make('waste_items')
-                ->label('Jenis Sampah')
-                    ->formatStateUsing(function ($state) {
-                        if (empty($state)) {
-                            return '-';
-                        }
-
-                        if (!is_array($state)) {
-                            $decoded = json_decode($state, true);
-                            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                                $state = $decoded;
-                            } else {
-                                return '-';
-                            }
-                        }
-
-                        $ids = [];
-                        foreach ($state as $item) {
-                            if (!empty($item['waste_type_id'])) {
-                                $ids[] = $item['waste_type_id'];
-                            }
-                        }
-
-                        $ids = array_values(array_unique($ids));
-
-                        if (!empty($ids)) {
-                            $namesById = \App\Models\WasteType::whereIn('id', $ids)
-                                ->pluck('name', 'id')
-                                ->toArray();
-
-                            $names = [];
-                            foreach ($state as $item) {
-                                if (!empty($item['waste_type_id']) && isset($namesById[$item['waste_type_id']])) {
-                                    $names[] = $namesById[$item['waste_type_id']];
-                                } elseif (!empty($item['waste_type'])) {
-                                    $names[] = $item['waste_type'];
-                                }
-                            }
-
-                            $names = array_values(array_unique($names));
-                            return $names ? implode(', ', $names) : '-';
-                        }
-
-                        // Fallback: maybe names were stored directly in the repeater items
-                        $direct = [];
-                        foreach ($state as $item) {
-                            if (!empty($item['waste_type'])) {
-                                $direct[] = $item['waste_type'];
-                            }
-                        }
-
-                        $direct = array_values(array_unique($direct));
-                        return $direct ? implode(', ', $direct) : '-';
-                    }),
+                ColumnGroup::make('Detail Sampah', [
+                    TextColumn::make('items.wasteType.name')
+                        ->label('Nama')
+                        ->bulleted()
+                        ->limitList(3)
+                        ->searchable()
+                        ->expandableLimitedList(),
+                    TextColumn::make('items.weight_kg')
+                        ->label('Berat')
+                        ->suffix(' Kg')
+                        ->bulleted()
+                        ->limitList(3)
+                        ->expandableLimitedList(),
+                    TextColumn::make('items.subtotal')
+                        ->label('Subtotal')
+                        ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
+                        ->bulleted()
+                        ->limitList(3)
+                        ->expandableLimitedList(),
+                ]),
             TextColumn::make('total_weight')
                 ->label('Total Berat')
                 ->numeric()

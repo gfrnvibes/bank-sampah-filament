@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('waste_sales', function (Blueprint $table) {
+        Schema::create('waste_sale_items', function (Blueprint $table) {
             $table->id();
-            $table->decimal('total_weight', 8, 2);
-            $table->decimal('total_income', 15, 2);
-            $table->string('buyer')->nullable();
-            $table->text('notes')->nullable();
+            $table->foreignId('waste_sale_id')->constrained('waste_sales')->onDelete('cascade');
+            $table->foreignId('waste_type_id')->constrained('waste_types');
+            $table->decimal('weight_kg', 10, 2);
+            $table->decimal('price_per_kg', 10, 2);
+            $table->decimal('subtotal', 15, 2);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('waste_sales');
+        Schema::dropIfExists('waste_sale_items');
     }
 };

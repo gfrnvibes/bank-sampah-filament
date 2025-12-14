@@ -8,6 +8,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -24,60 +25,26 @@ class WasteSalesTable
                     ->label('Tanggal')
                     ->date()
                     ->sortable(),
-            TextColumn::make('waste_items')
-                ->label('Jenis Sampah')
-                ->formatStateUsing(function ($state) {
-                        if (empty($state)) {
-                            return '-';
-                        }
-
-                        if (!is_array($state)) {
-                            $decoded = json_decode($state, true);
-                            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                                $state = $decoded;
-                            } else {
-                                return '-';
-                            }
-                        }
-
-                        $ids = [];
-                        foreach ($state as $item) {
-                            if (!empty($item['waste_type_id'])) {
-                                $ids[] = $item['waste_type_id'];
-                            }
-                        }
-
-                        $ids = array_values(array_unique($ids));
-
-                        if (!empty($ids)) {
-                            $namesById = \App\Models\WasteType::whereIn('id', $ids)
-                                ->pluck('name', 'id')
-                                ->toArray();
-
-                            $names = [];
-                            foreach ($state as $item) {
-                                if (!empty($item['waste_type_id']) && isset($namesById[$item['waste_type_id']])) {
-                                    $names[] = $namesById[$item['waste_type_id']];
-                                } elseif (!empty($item['waste_type'])) {
-                                    $names[] = $item['waste_type'];
-                                }
-                            }
-
-                            $names = array_values(array_unique($names));
-                            return $names ? implode(', ', $names) : '-';
-                        }
-
-                        // Fallback: maybe names were stored directly in the repeater items
-                        $direct = [];
-                        foreach ($state as $item) {
-                            if (!empty($item['waste_type'])) {
-                                $direct[] = $item['waste_type'];
-                            }
-                        }
-
-                        $direct = array_values(array_unique($direct));
-                        return $direct ? implode(', ', $direct) : '-';
-                    }),
+                ColumnGroup::make('Detail Sampah', [
+                    TextColumn::make('items.wasteType.name')
+                        ->label('Nama')
+                        ->bulleted()
+                        ->limitList(3)
+                        ->searchable()
+                        ->expandableLimitedList(),
+                    TextColumn::make('items.weight_kg')
+                        ->label('Berat')
+                        ->suffix(' Kg')
+                        ->bulleted()
+                        ->limitList(3)
+                        ->expandableLimitedList(),
+                    TextColumn::make('items.subtotal')
+                        ->label('Subtotal')
+                        ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
+                        ->bulleted()
+                        ->limitList(3)
+                        ->expandableLimitedList(),
+                ]),
             TextColumn::make('total_weight')
                 ->label('Total Berat')
                 ->numeric()

@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\TransactionHistory;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class WasteDeposit extends Model
 {
-    protected $fillable = ['user_id', 'waste_items', 'total_weight', 'total_amount', 'notes'];
+
+    use HasFactory, SoftDeletes;
+    
+    protected $fillable = ['user_id', 'total_weight', 'total_amount', 'notes'];
 
     protected $casts = [
-        'waste_items' => 'json',
         'total_weight' => 'float',
         'total_amount' => 'float',
     ];
@@ -20,6 +24,11 @@ class WasteDeposit extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(WasteDepositItem::class);
     }
 
     public function transactionHistory()
