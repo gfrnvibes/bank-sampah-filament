@@ -2,19 +2,26 @@
 
 namespace App\Filament\Resources\WasteDeposits\Tables;
 
-use Filament\Tables\Table;
-use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
+use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
-use Filament\Tables\Filters\Filter;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
-use Filament\Forms\Components\Select;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ColumnGroup;
+use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class WasteDepositsTable
 {
@@ -25,7 +32,8 @@ class WasteDepositsTable
                 TextColumn::make('created_at')
                     ->label('Tanggal')
                     ->listWithLineBreaks()
-                    ->date()
+                    ->label('Waktu')
+                    ->dateTime('d/m/y, h:i')
                     ->sortable(),
                 TextColumn::make('user.name')
                     ->label('Nasabah')
@@ -69,6 +77,7 @@ class WasteDepositsTable
                     ->sortable(),
                 TextColumn::make('notes')
                     ->limit(50)
+                    ->default('-')
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
                     ->dateTime()
@@ -94,15 +103,27 @@ class WasteDepositsTable
                     }),
             ])
             ->recordActions([
-                // ViewAction::make(),
                 ActionGroup::make([
                     ViewAction::make(),
-                    // EditAction::make(),
+                    // DeleteAction::make()
+                    //     ->action(fn ($record) =>
+                    //         $record->update(['hidden_by_admin' => true])
+                    //     ),
                 ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    // DeleteBulkAction::make(),
+                    // BulkAction::make('hide')
+                    //     ->label('Hapus')
+                    //     ->icon('heroicon-o-trash')
+                    //     ->color('danger')
+                    //     ->action(fn ($records) =>
+                    //         $records->each->update(['hidden_by_admin' => true])
+                    //     )
+                    //     ->requiresConfirmation(),
+                    // ForceDeleteBulkAction::make(),
+
                 ]),
             ]);
     }

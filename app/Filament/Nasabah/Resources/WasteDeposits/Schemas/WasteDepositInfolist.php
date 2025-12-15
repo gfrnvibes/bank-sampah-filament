@@ -45,6 +45,10 @@ class WasteDepositInfolist
                     ->bulleted()
                     ->columnSpan(1),
 
+                TextEntry::make('notes')
+                    ->label('Catatan')
+                    ->placeholder('Tidak ada catatan'),
+
                 TextEntry::make('created_at')
                     ->label('Dibuat pada'),
 

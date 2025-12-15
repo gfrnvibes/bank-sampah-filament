@@ -17,7 +17,7 @@ class ManageBalanceWithdrawals extends ManageRecords
             CreateAction::make()
                 ->label('Buat Penarikan Saldo')
                 ->modalWidth('md')
-                ->modalSubmitActionLabel('Tarik Saldo')
+                // ->modalSubmitActionLabel('Buat')
                 ->modalHeading('Buat Penarikan Saldo')
                 ->icon('heroicon-o-plus-circle')
                 ->after(function (CreateAction $action) {

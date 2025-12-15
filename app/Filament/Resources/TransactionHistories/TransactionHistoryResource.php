@@ -109,7 +109,7 @@ class TransactionHistoryResource extends Resource
             ->heading('Penyetoran dan Penarikan Saldo Nasabah')
             ->columns([
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('d/m/y, h:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('user.name')
@@ -178,7 +178,8 @@ class TransactionHistoryResource extends Resource
 
             ])
             ->headerActions([
-                FilamentExportHeaderAction::make('export'),
+                FilamentExportHeaderAction::make('export')
+                    ->disableAdditionalColumns(),
             ])
             ->recordActions([
                 ActionGroup::make([
@@ -190,7 +191,10 @@ class TransactionHistoryResource extends Resource
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    // DeleteBulkAction::make(),
+                    FilamentExportHeaderAction::make('export')
+                        ->label('Ekspor yang dipilih')
+                        ->disableAdditionalColumns(),
                 ]),
             ]);
     }

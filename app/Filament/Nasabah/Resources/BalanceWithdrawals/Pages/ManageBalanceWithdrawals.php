@@ -20,11 +20,11 @@ class ManageBalanceWithdrawals extends ManageRecords
         return [
             CreateAction::make()
                 ->label('Tarik Saldo')
-                ->modalHeading('Tarik Saldo')
+                ->modalHeading('Pengajuan Tarik Saldo')
                 ->modalWidth('md')
                 ->createAnother(false)
                 ->icon('heroicon-o-plus-circle')
-                ->modalSubmitActionLabel('Tarik Saldo')
+                ->modalSubmitActionLabel('Buat Pengajuan')
                 ->after(function (CreateAction $action) {
                     $record = $action->getRecord();
 

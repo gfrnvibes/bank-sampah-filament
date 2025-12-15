@@ -22,10 +22,12 @@ class StatsOverview extends StatsOverviewWidget
     protected function getStats(): array
     {
         return [
-            // Waste Sale Total Income - BalanceWithdrawal Total Amount
+            // Waste Sale Total Income - BalanceWithdrawal Total Amount            
             Stat::make('Saldo Bank Sampah', 
-            'Rp ' . number_format(WasteSale::sum('total_income') - BalanceWithdrawal::where('status', 'completed')->sum('amount'), 0, '.', '.'))
-                // ->description('32k increase')
+                'Rp ' . number_format(
+                    max(0, WasteSale::sum('total_income') - BalanceWithdrawal::where('status', 'completed')->sum('amount')), 
+                    0, '.', '.'
+                ))
                 ->color('success')
                 ->chart([7, 2, 10, 3, 15, 4, 17])
                 ->descriptionIcon('heroicon-m-arrow-trending-up', IconPosition::Before),

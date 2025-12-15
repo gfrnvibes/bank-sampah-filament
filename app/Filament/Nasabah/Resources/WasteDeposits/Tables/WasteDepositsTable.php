@@ -27,8 +27,8 @@ class WasteDepositsTable
             )
             ->columns([
                 TextColumn::make('created_at')
-                    ->label('Tanggal')
-                    ->date()
+                    ->label('Waktu')
+                    ->dateTime('d/m/y, h:i')
                     ->sortable(),
                 ColumnGroup::make('Detail Sampah', [
                     TextColumn::make('items.wasteType.name')
@@ -68,6 +68,7 @@ class WasteDepositsTable
                     ->sortable(),
                 TextColumn::make('notes')
                     ->label('Catatan')
+                    ->default('-')
                     ->limit(50)
                     ->toggleable(),
                 TextColumn::make('updated_at')
@@ -101,7 +102,7 @@ class WasteDepositsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    // DeleteBulkAction::make(),
                 ]),
             ]);
     }

@@ -9,11 +9,7 @@ class BalanceWithdrawal extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'amount',
-        'status',
-    ];
+    protected $fillable = ['user_id', 'amount', 'status'];
 
     protected $casts = [
         'amount' => 'decimal:2',
@@ -60,7 +56,7 @@ class BalanceWithdrawal extends Model
                     'description' => 'Penarikan saldo',
                     'reference_id' => $withdrawal->id,
                     'balance_before' => $balanceBefore,
-                    'balance_after' => $balanceAfter
+                    'balance_after' => $balanceAfter,
                 ]);
 
                 $user->balance = $balanceAfter;
@@ -86,17 +82,30 @@ class BalanceWithdrawal extends Model
                         'description' => 'Penarikan saldo',
                         'reference_id' => $withdrawal->id,
                         'balance_before' => $balanceBefore,
-                        'balance_after' => $balanceAfter
+                        'balance_after' => $balanceAfter,
                     ]);
                 } else {
                     $withdrawal->transactionHistory->update([
                         'balance_before' => $balanceBefore,
-                        'balance_after' => $balanceAfter
+                        'balance_after' => $balanceAfter,
                     ]);
                 }
 
                 $user->balance = $balanceAfter;
                 $user->save();
+            }
+        });
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('visibility', function ($query) {
+            if (filament()->getCurrentPanel()?->getId() === 'admin') {
+                $query->where('hidden_by_admin', false);
+            }
+
+            if (filament()->getCurrentPanel()?->getId() === 'user') {
+                $query->where('hidden_by_user', false);
             }
         });
     }

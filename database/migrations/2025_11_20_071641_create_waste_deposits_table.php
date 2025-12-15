@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('waste_deposits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->decimal('total_weight', 10, 2)->default(0); // Total Kg keseluruhan
-            $table->decimal('total_amount', 15, 2)->default(0); // Total Rupiah keseluruhan
+            $table->decimal('total_weight', 10, 2)->default(0);
+            $table->decimal('total_amount', 15, 2)->default(0);
             $table->text('notes')->nullable();
-            $table->softDeletes(); // Tambahkan ini
+            $table->boolean('hidden_by_user')->default(false);
+            $table->boolean('hidden_by_admin')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

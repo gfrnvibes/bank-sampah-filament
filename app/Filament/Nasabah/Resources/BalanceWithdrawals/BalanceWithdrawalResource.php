@@ -59,7 +59,7 @@ class BalanceWithdrawalResource extends Resource
                     ->label('Jumlah Penarikan')
                     ->numeric()
                     ->required()
-                    ->minValue(1) // angka harus > 0
+                    // ->minValue(1000)
                     ->rule(function () {
                         return function (string $attribute, $value, $fail) {
                             $user = Filament::auth()->user();
@@ -72,6 +72,11 @@ class BalanceWithdrawalResource extends Resource
                             if ($value > $user->balance) {
                                 $fail('Jumlah penarikan melebihi saldo yang kamu punya.');
                             }
+
+                            if ($value <= 1000) {
+                                $fail('Minimal penarikan Rp. 1000');
+                            }
+
                         };
                     }),
 
@@ -130,7 +135,7 @@ class BalanceWithdrawalResource extends Resource
             ->columns([
                 TextColumn::make('created_at')
                     ->label('Tanggal & Waktu')
-                    ->dateTime()
+                    ->dateTime('d/m/y, h:i')
                     ->sortable(),
                 TextColumn::make('amount')
                     ->label('Jumlah Penarikan')
@@ -168,9 +173,10 @@ class BalanceWithdrawalResource extends Resource
                     ->schema([
                         Select::make('status')
                             ->options([
-                                'pending' => 'Pending',
-                                'accepted' => 'Accepted',
-                                'rejected' => 'Rejected',
+                                'pending' => 'Menunggu',
+                                'accepted' => 'Disetujui',
+                                'rejected' => 'Ditolak',
+                                'completed' => 'Selesai',
                             ])->native(false),
                         DatePicker::make('created_from')->label('Created from'),
                         DatePicker::make('created_until')->label('Created until'),
@@ -201,7 +207,7 @@ class BalanceWithdrawalResource extends Resource
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    // DeleteBulkAction::make(),
                 ]),
             ]);
     }

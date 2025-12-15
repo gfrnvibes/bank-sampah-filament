@@ -114,7 +114,8 @@ class WasteSaleForm
 
                     // Jika ini field user relasi, sebaiknya Select. Jika text biasa, ok.
                     TextInput::make('buyer')
-                        ->label('Pembeli'),
+                        ->label('Pembeli')
+                        ->required(),
                     
                 Textarea::make('notes')
                     ->label('Catatan')

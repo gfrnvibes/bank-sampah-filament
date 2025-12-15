@@ -2,18 +2,20 @@
 
 namespace App\Filament\Resources\WasteSales\Tables;
 
-use Filament\Actions\ActionGroup;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
+use Filament\Tables\Table;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Columns\ColumnGroup;
-use Filament\Tables\Columns\Summarizers\Sum;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Table;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ColumnGroup;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Tables\Columns\Summarizers\Sum;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class WasteSalesTable
 {
@@ -22,8 +24,8 @@ class WasteSalesTable
         return $table
             ->columns([
             TextColumn::make('created_at')
-                    ->label('Tanggal')
-                    ->date()
+                    ->label('Waktu')
+                    ->dateTime('d/m/y, h:i')
                     ->sortable(),
                 ColumnGroup::make('Detail Sampah', [
                     TextColumn::make('items.wasteType.name')
@@ -62,12 +64,17 @@ class WasteSalesTable
             TextColumn::make('buyer')
                 ->label('Pembeli')
                 ->searchable(),
+            TextColumn::make('notes')
+                ->label('Catatan')
+                ->default('-')
+                ->toggleable(),
             TextColumn::make('updated_at')
                 ->dateTime()
                 ->sortable()
                 ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                // TrashedFilter::make(),
                 Filter::make('advanced')
                     ->schema([
                         DatePicker::make('created_from')->label('Created from'),
@@ -93,7 +100,7 @@ class WasteSalesTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    // DeleteBulkAction::make(),
                 ]),
             ]);
     }

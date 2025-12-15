@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\WasteSales\Pages;
 
-use App\Filament\Resources\WasteSales\WasteSaleResource;
 use App\Models\WasteSale;
-use Filament\Notifications\Notification;
-use Filament\Resources\Pages\CreateRecord;
 use Filament\Support\Icons\Heroicon;
+use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\WasteSales\WasteSaleResource;
 
 class CreateWasteSale extends CreateRecord
 {
@@ -31,4 +33,12 @@ class CreateWasteSale extends CreateRecord
 
         return $data;
     }
+
+    public static function getRecordRouteBindingEloquentQuery(): Builder
+{
+    return parent::getRecordRouteBindingEloquentQuery()
+        ->withoutGlobalScopes([
+            SoftDeletingScope::class,
+        ]);
+}
 }

@@ -134,6 +134,7 @@ class LaporanPenyetoran extends Component implements HasForms, HasTable, HasActi
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                     FilamentExportBulkAction::make('export')
+                        ->label('Expor yang dipilih')
                         ->disableAdditionalColumns(),
                 ]),
             ]);

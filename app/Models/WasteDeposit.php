@@ -6,15 +6,16 @@ use App\Models\User;
 use App\Models\TransactionHistory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class WasteDeposit extends Model
 {
-
     use HasFactory, SoftDeletes;
-    
-    protected $fillable = ['user_id', 'total_weight', 'total_amount', 'notes'];
+
+    protected $fillable = ['user_id', 'total_weight', 'total_amount', 'notes', 'hidden_by_admin', 'hidden_by_user'];
 
     protected $casts = [
         'total_weight' => 'float',
@@ -53,12 +54,25 @@ class WasteDeposit extends Model
                 'description' => 'Penyetoran sampah',
                 'reference_id' => $wasteDeposit->id,
                 'balance_before' => $balanceBefore,
-                'balance_after' => $balanceAfter
+                'balance_after' => $balanceAfter,
             ]);
 
             // Update balance user
             $user->balance = $balanceAfter;
             $user->save();
+        });
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('visibility', function ($query) {
+            if (filament()->getCurrentPanel()?->getId() === 'admin') {
+                $query->where('hidden_by_admin', false);
+            }
+
+            if (filament()->getCurrentPanel()?->getId() === 'nasabah') {
+                $query->where('hidden_by_user', false);
+            }
         });
     }
 }

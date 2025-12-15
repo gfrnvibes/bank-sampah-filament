@@ -45,6 +45,11 @@ class WasteDepositInfolist
                     ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
                     ->bulleted()
                     ->columnSpan(1),
+                
+                TextEntry::make('notes')
+                    ->label('Catatan')
+                    ->placeholder('Tidak ada catatan')
+                   ,
 
                 TextEntry::make('created_at')
                     ->label('Dibuat pada'),

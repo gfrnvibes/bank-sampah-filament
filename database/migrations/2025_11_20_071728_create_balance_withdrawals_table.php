@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 15, 2); // Nominal penarikan
             $table->enum('status', ['pending', 'accepted', 'rejected', 'completed'])->default('pending');
+            $table->boolean('hidden_by_user')->default(false);
+            $table->boolean('hidden_by_admin')->default(false);
             $table->timestamps();
         });
     }

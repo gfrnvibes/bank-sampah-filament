@@ -17,6 +17,8 @@ return new class extends Migration
             $table->decimal('total_income', 15, 2);
             $table->string('buyer')->nullable();
             $table->text('notes')->nullable();
+            $table->boolean('hidden_by_user')->default(false);
+            $table->boolean('hidden_by_admin')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

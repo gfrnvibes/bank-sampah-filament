@@ -18,6 +18,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
@@ -60,6 +61,7 @@ class BalanceWithdrawalResource extends Resource
                 TextInput::make('amount')
                     ->label('Jumlah Penarikan')
                     ->prefix('Rp')
+                    ->placeholder('56500')
                     ->required()
                     ->numeric()
                     ->rules([
@@ -71,19 +73,28 @@ class BalanceWithdrawalResource extends Resource
                                     if ($user && $user->balance < $value) {
                                         $fail('Saldo nasabah tidak mencukupi');
                                     }
+                                    // nilai negatif
+                                    if ($value <= 1000) {
+                                        $fail('Jumlah penarikan harus lebih dari Rp 1.000');
+                                    }
                                 }
                             };
                         }
                     ]),
-                Select::make('status')
+                Radio::make('status')
                     ->options([
-                        'pending' => 'Pending',
-                        'accepted' => 'Accepted',
-                        'rejected' => 'Rejected',
-                        'completed' => 'Completed'
+                        'pending' => 'Menunggu',
+                        'accepted' => 'Disetujui',
+                        // 'rejected' => 'Ditolak',
+                        'completed' => 'Selesai'
                     ])
-                    ->default('pending')
-                    ->native(false)
+                    ->descriptions([
+                        'pending' => 'Menunggu persetujuan',
+                        'accepted' => 'Tunai belum diberikan kepada nasabah',
+                        // 'rejected' => 'Pengajuan ditolak',
+                        'completed' => 'Tunai telah diberikan kepada nasabah',
+                    ])
+                    ->default('completed')
                     ->required(),
             ])->columns(1);
     }
@@ -137,10 +148,11 @@ class BalanceWithdrawalResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+        
             ->columns([
                 TextColumn::make('created_at')
                     ->label('Tanggal')
-                    ->dateTime()
+                    ->dateTime('d/m/y, h:i')
                     ->sortable(),
                 TextColumn::make('user.name')
                     ->label('Nasabah')
@@ -186,10 +198,10 @@ class BalanceWithdrawalResource extends Resource
                     ->schema([
                         Select::make('status')
                             ->options([
-                                'pending' => 'Pending',
-                                'accepted' => 'Accepted',
-                                'rejected' => 'Rejected',
-                                'completed' => 'Complete',
+                                'pending' => 'Menunggu',
+                                'accepted' => 'Disetujui',
+                                'rejected' => 'Ditolak',
+                                'completed' => 'Selesai',
                             ])->native(false),
                         DatePicker::make('created_from')->label('Created from'),
                         DatePicker::make('created_until')->label('Created until'),
@@ -220,6 +232,10 @@ class BalanceWithdrawalResource extends Resource
             ->recordActions([
 
                 ActionGroup::make([
+                    // DeleteAction::make()
+                    //     ->action(function (BalanceWithdrawal $record) {
+                    //         $record->hidden_by_admin = true;
+                    //     }),
                     Action::make('accept')
                         ->label('Accept')
                         ->requiresConfirmation()
@@ -281,67 +297,67 @@ class BalanceWithdrawalResource extends Resource
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    // DeleteBulkAction::make(),
 
-                    BulkAction::make('accept')
-                        ->label('Accept')
-                        ->requiresConfirmation()
-                        ->action(function ($records) {
-                            foreach ($records as $record) {
-                                $record->update(['status' => 'accepted']);
-                            }
-                        })
-                        ->icon('heroicon-o-information-circle')
-                        ->color('primary')
-                        ->visible(
-                            fn($records) =>
-                            $records->every(fn($r) => $r->status === 'pending')
-                        ),
+                    // BulkAction::make('accept')
+                    //     ->label('Accept')
+                    //     ->requiresConfirmation()
+                    //     ->action(function ($records) {
+                    //         foreach ($records as $record) {
+                    //             $record->update(['status' => 'accepted']);
+                    //         }
+                    //     })
+                    //     ->icon('heroicon-o-information-circle')
+                    //     ->color('primary')
+                    //     ->visible(
+                    //         fn($records) =>
+                    //         $records->every(fn($r) => $r->status === 'pending')
+                    //     ),
 
-                    BulkAction::make('completed')
-                        ->label('Complete')
-                        ->requiresConfirmation()
-                        ->action(function ($records) {
-                            foreach ($records as $record) {
-                                $record->update(['status' => 'completed']);
+                    // BulkAction::make('completed')
+                    //     ->label('Complete')
+                    //     ->requiresConfirmation()
+                    //     ->action(function ($records) {
+                    //         foreach ($records as $record) {
+                    //             $record->update(['status' => 'completed']);
 
-                                $user = $record->user;
-                                $balanceBefore = $user->balance;
-                                $user->balance -= $record->amount;
-                                $user->save();
+                    //             $user = $record->user;
+                    //             $balanceBefore = $user->balance;
+                    //             $user->balance -= $record->amount;
+                    //             $user->save();
 
-                                TransactionHistory::create([
-                                    'user_id' => $user->id,
-                                    'type' => 'withdrawal',
-                                    'amount' => $record->amount,
-                                    'balance_before' => $balanceBefore,
-                                    'balance_after' => $user->balance,
-                                    // 'reference_type' => BalanceWithdrawal::class,
-                                    'reference_id' => $record->id,
-                                ]);
-                            }
-                        })
-                        ->icon('heroicon-o-check-circle')
-                        ->color('success')
-                        ->visible(
-                            fn($records) =>
-                            $records->every(fn($r) => $r->status === 'accepted')
-                        ),
+                    //             TransactionHistory::create([
+                    //                 'user_id' => $user->id,
+                    //                 'type' => 'withdrawal',
+                    //                 'amount' => $record->amount,
+                    //                 'balance_before' => $balanceBefore,
+                    //                 'balance_after' => $user->balance,
+                    //                 // 'reference_type' => BalanceWithdrawal::class,
+                    //                 'reference_id' => $record->id,
+                    //             ]);
+                    //         }
+                    //     })
+                    //     ->icon('heroicon-o-check-circle')
+                    //     ->color('success')
+                    //     ->visible(
+                    //         fn($records) =>
+                    //         $records->every(fn($r) => $r->status === 'accepted')
+                    //     ),
 
-                    BulkAction::make('reject')
-                        ->label('Reject')
-                        ->requiresConfirmation()
-                        ->action(function ($records) {
-                            foreach ($records as $record) {
-                                $record->update(['status' => 'rejected']);
-                            }
-                        })
-                        ->icon('heroicon-o-x-circle')
-                        ->color('danger')
-                        ->visible(
-                            fn($records) =>
-                            $records->every(fn($r) => $r->status === 'pending')
-                        ),
+                    // BulkAction::make('reject')
+                    //     ->label('Reject')
+                    //     ->requiresConfirmation()
+                    //     ->action(function ($records) {
+                    //         foreach ($records as $record) {
+                    //             $record->update(['status' => 'rejected']);
+                    //         }
+                    //     })
+                    //     ->icon('heroicon-o-x-circle')
+                    //     ->color('danger')
+                    //     ->visible(
+                    //         fn($records) =>
+                    //         $records->every(fn($r) => $r->status === 'pending')
+                    //     ),
                 ]),
             ]);
 
