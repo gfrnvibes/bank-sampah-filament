@@ -74,7 +74,7 @@
         <div class="container">
             <div class="row align-items-center g-4">
                 <div class="col-lg-6">
-                    <img src="https://images.unsplash.com/photo-1603575448878-868a20723f5d?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=75"
+                    <img src="{{ asset('images/tanggulun.jpeg') }}"
                          alt="Bank Sampah Desa Tanggulun, Kadungora, Garut"
                          class="img-fluid rounded-4 shadow">
                 </div>
