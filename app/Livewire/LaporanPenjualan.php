@@ -57,6 +57,7 @@ class LaporanPenjualan extends Component implements HasForms, HasTable, HasActio
                         ->suffix(' Kg')
                         ->bulleted()
                         ->limitList(3)
+                        ->formatStateUsing(fn ($state) => number_format($state, 1, ',', '.'))
                         ->expandableLimitedList(),
                     TextColumn::make('items.subtotal')
                         ->label('Subtotal')
@@ -69,6 +70,7 @@ class LaporanPenjualan extends Component implements HasForms, HasTable, HasActio
                 ->label('Total Berat')
                 ->numeric()
                 ->suffix(' Kg')
+                ->formatStateUsing(fn ($state) => number_format($state, 1, ',', '.'))
                 ->color('danger')
                 ->sortable(),
             TextColumn::make('total_income')

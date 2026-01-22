@@ -59,6 +59,7 @@ class LaporanPenyetoran extends Component implements HasForms, HasTable, HasActi
                         ->suffix(' Kg')
                         ->bulleted()
                         ->limitList(3)
+                        ->formatStateUsing(fn ($state) => number_format($state, 1, ',', '.'))
                         ->expandableLimitedList(),
                     // TextColumn::make('items.subtotal')
                     //     ->label('Subtotal')
@@ -74,6 +75,7 @@ class LaporanPenyetoran extends Component implements HasForms, HasTable, HasActi
                     ->color('danger')
                     ->alignCenter()
                     ->summarize(Sum::make()->suffix(' Kg'))
+                    ->formatStateUsing(fn ($state) => number_format($state, 1, ',', '.'))
                     ->sortable(),
                 TextColumn::make('total_amount')
                     ->label('Total Pendapatan')

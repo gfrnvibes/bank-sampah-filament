@@ -52,6 +52,7 @@ class WasteDepositsTable
                         ->suffix(' Kg')
                         ->bulleted()
                         ->limitList(3)
+                        ->formatStateUsing(fn ($state) => number_format($state, 1, ',', '.'))
                         ->expandableLimitedList(),
                     TextColumn::make('items.subtotal')
                         ->label('Subtotal')
@@ -66,6 +67,7 @@ class WasteDepositsTable
                     ->suffix(' Kg')
                     ->color('danger')
                     ->alignCenter()
+                    ->formatStateUsing(fn ($state) => number_format($state, 1, ',', '.'))
                     ->summarize(Sum::make()->label('Jumlah')->suffix(' Kg'))
                     ->sortable(),
                 TextColumn::make('total_amount')

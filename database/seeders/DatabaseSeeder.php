@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             WasteTypeSeeder::class,
             WasteAndBalanceSeeder::class,
             WasteSaleSeeder::class,
-            WasteDepositSeeder::class,
+            // WasteDepositSeeder::class,
         ]);
     }
 

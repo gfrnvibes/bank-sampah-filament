@@ -122,6 +122,7 @@ class WasteDepositForm
                 Grid::make(2)->schema([
                     FileUpload::make('receipt')
                             ->label('Bukti Transaksi')
+                            ->required()
                             ->image(),
                     Textarea::make('notes')
                         ->label('Catatan'),

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\WasteDeposit;
+use App\Models\WasteDepositItem;
 use App\Models\BalanceWithdrawal;
 use App\Models\TransactionHistory;
 use App\Models\WasteType;
@@ -52,11 +53,23 @@ class WasteAndBalanceSeeder extends Seeder
                 // Simpan data deposit
                 $deposit = WasteDeposit::create([
                     'user_id' => $user->id,
-                    'waste_items' => json_encode($wasteItems),
                     'total_weight' => $totalWeight,
                     'total_amount' => $totalAmount,
                     'notes' => 'Auto seeded deposit',
+                    'receipt' => null,
                 ]);
+
+                // Simpan waste deposit items
+                foreach ($wasteItems as $item) {
+                    $pricePerKg = $wasteTypes[$item['waste_type_id']];
+                    WasteDepositItem::create([
+                        'waste_deposit_id' => $deposit->id,
+                        'waste_type_id' => $item['waste_type_id'],
+                        'weight_kg' => $item['weight'],
+                        'price_per_kg' => $pricePerKg,
+                        'subtotal' => $item['weight'] * $pricePerKg,
+                    ]);
+                }
 
                 // Update balance user
                 $balanceBefore = $balance;
@@ -97,6 +110,7 @@ class WasteAndBalanceSeeder extends Seeder
                     'user_id' => $user->id,
                     'amount' => $amount,
                     'status' => $status,
+                    'receipt' => "Auto seeded withdrawal",
                 ]);
 
                 // Update balance user
