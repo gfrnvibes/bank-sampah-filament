@@ -20,16 +20,18 @@
                             Ubah sampah jadi berkah. Sistem terintegrasi, transparan, dan ramah warga Tanggulun.
                         </p>
                         @guest
-                            <a href="" class="btn btn-accent btn-lg px-4 py-2 fw-bold rounded-pill">
-                                Masuk Sekarang
-                            </a>
+                            <div class="text-center">
+                                <a href="" class="btn btn-accent btn-lg px-4 py-2 fw-bold rounded-pill">
+                                    Masuk Sekarang
+                                </a>
+                            </div>
                         @endguest
                         @auth
-                        <div class="text-center">
-                            <a href="/nasabah" class="btn btn-success btn-lg px-4 py-2 fw-bold rounded-pill ">
-                                Dashboard
-                            </a>
-                        </div>
+                            <div class="text-center">
+                                <a href="/nasabah" class="btn btn-success btn-lg px-4 py-2 fw-bold rounded-pill ">
+                                    Dashboard
+                                </a>
+                            </div>
                         @endauth
                     </div>
                 </div>
@@ -37,15 +39,14 @@
         </div>
     </section>
 
- 
+
     <!-- Tentang Desa / How It Works -->
     <section class="section-py">
         <div class="container">
             <div class="row align-items-center g-4">
                 <div class="col-lg-6">
-                    <img src="{{ asset('images/tanggulun.jpeg') }}"
-                         alt="Bank Sampah Desa Tanggulun, Kadungora, Garut"
-                         class="img-fluid rounded-4 shadow">
+                    <img src="{{ asset('images/tanggulun.jpeg') }}" alt="Bank Sampah Desa Tanggulun, Kadungora, Garut"
+                        class="img-fluid rounded-4 shadow">
                 </div>
                 <div class="col-lg-6">
                     <h2 class="fw-bold display-6 section-title text-brand mb-3">Cara Kerja di Tanggulun</h2>
@@ -53,7 +54,9 @@
 
                     <div class="d-flex mb-4">
                         <div class="me-3">
-                            <div class="step-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center">1</div>
+                            <div
+                                class="step-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center">
+                                1</div>
                         </div>
                         <div>
                             <h3 class="h5 mb-1">Pilah Sampah</h3>
@@ -63,7 +66,9 @@
 
                     <div class="d-flex mb-4">
                         <div class="me-3">
-                            <div class="step-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center">2</div>
+                            <div
+                                class="step-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center">
+                                2</div>
                         </div>
                         <div>
                             <h3 class="h5 mb-1">Setor / Jemput</h3>
@@ -73,11 +78,14 @@
 
                     <div class="d-flex">
                         <div class="me-3">
-                            <div class="step-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center">3</div>
+                            <div
+                                class="step-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center">
+                                3</div>
                         </div>
                         <div>
                             <h3 class="h5 mb-1">Saldo & Manfaat</h3>
-                            <p class="text-muted mb-0">Poin dikonversi ke saldo. Bisa dicairkan atau ditukar program desa.</p>
+                            <p class="text-muted mb-0">Poin dikonversi ke saldo. Bisa dicairkan atau ditukar program
+                                desa.</p>
                         </div>
                     </div>
                 </div>
@@ -188,8 +196,10 @@
                         <h5 class="mb-3">Kontak Cepat</h5>
                         <ul class="list-unstyled mb-0 text-muted">
                             <li class="mb-2"><i class="bi bi-telephone me-2"></i> Kantor Desa: (0262) ———</li>
-                            <li class="mb-2"><i class="bi bi-whatsapp me-2"></i> Admin Bank Sampah: 08xx-xxxx-xxxx</li>
-                            <li class=""><i class="bi bi-envelope me-2"></i> Email: banksampah@tanggulun.desa.id</li>
+                            <li class="mb-2"><i class="bi bi-whatsapp me-2"></i> Admin Bank Sampah: 08xx-xxxx-xxxx
+                            </li>
+                            <li class=""><i class="bi bi-envelope me-2"></i> Email: banksampah@tanggulun.desa.id
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -210,7 +220,7 @@
                         <div class="card-body p-4">
                             <div class="d-flex mb-3">
                                 <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Siti Aminah"
-                                     class="rounded-circle me-3" width="50" height="50">
+                                    class="rounded-circle me-3" width="50" height="50">
                                 <div>
                                     <h5 class="mb-0">Siti Aminah</h5>
                                     <small class="text-muted">Warga Tanggulun, sejak 2022</small>
@@ -225,7 +235,7 @@
                         <div class="card-body p-4">
                             <div class="d-flex mb-3">
                                 <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Budi Santoso"
-                                     class="rounded-circle me-3" width="50" height="50">
+                                    class="rounded-circle me-3" width="50" height="50">
                                 <div>
                                     <h5 class="mb-0">Budi Santoso</h5>
                                     <small class="text-muted">Pelapak, sejak 2021</small>
@@ -240,7 +250,7 @@
                         <div class="card-body p-4">
                             <div class="d-flex mb-3">
                                 <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Dewi Lestari"
-                                     class="rounded-circle me-3" width="50" height="50">
+                                    class="rounded-circle me-3" width="50" height="50">
                                 <div>
                                     <h5 class="mb-0">Dewi Lestari</h5>
                                     <small class="text-muted">Aktivis Lingkungan</small>
@@ -256,20 +266,17 @@
 
     <!-- CTA Section -->
     @guest
-        <section class="section-py">
+        <section class="mt-5 ">
             <div class="container text-center">
                 <h2 class="fw-bold display-6 text-brand mb-3">Waktunya Gabung, Warga Tanggulun!</h2>
-                <p class="lead section-subtitle mb-5">Mulai pilah sekarang, rasakan manfaatnya.</p>
-                {{-- <div class="d-flex justify-content-center gap-3">
-                    @guest
-                        <a href="{{ route('register') }}" class="btn btn-brand btn-lg px-4 py-2 fw-bold rounded-pill">Daftar</a>
-                        <a href="{{ route('login') }}" class="btn btn-outline-success btn-lg px-4 py-2 fw-bold rounded-pill">Masuk</a>
-                    @endguest
-                    @auth
-                        <a href="{{ route('setor-sampah') }}" class="btn btn-brand btn-lg px-4 py-2 fw-bold rounded-pill">Setor Sampah</a>
-                    @endauth
-                </div> --}}
-            </div>
+                <p class="lead section-subtitle mb-4">Mulai pilah sekarang, rasakan manfaatnya.</p>
+                <div class="d-flex justify-content-center gap-3">
+
+                    <a href="{{ route('nasabah.register') }}"
+                        class="btn btn-brand btn-lg px-4 py-2 fw-bold rounded-pill">Daftar</a>
+                    <a href="{{ route('filament.nasabah.auth.login') }}"
+                        class="btn btn-outline-success btn-lg px-4 py-2 fw-bold rounded-pill">Masuk</a>
+                </div>
         </section>
     @endguest
 
