@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Users\Tables;
 
 use Filament\Actions\ActionGroup;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -92,6 +93,24 @@ class UsersTable
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),
+                    Action::make('activate')
+                        ->label('Verifikasi Nasabah')
+                        ->requiresConfirmation()
+                        ->action(function ($record) {
+                            $record->update(['is_active' => true]);
+                        })
+                        ->icon('heroicon-s-check-circle')
+                        ->color('success')
+                        ->visible(fn($record) => $record->is_active === false),
+                    Action::make('activate')
+                        ->label('Blokir Nasabah')
+                        ->requiresConfirmation()
+                        ->action(function ($record) {
+                            $record->update(['is_active' => false]);
+                        })
+                        ->icon('heroicon-s-exclamation-triangle')
+                        ->color('danger')
+                        ->visible(fn($record) => $record->is_active === true),
                 ])
             ])
             ->toolbarActions([
