@@ -28,7 +28,7 @@
                         @endguest
                         @auth
                             <div class="text-center">
-                                <a href="/nasabah" class="btn btn-success btn-lg px-4 py-2 fw-bold rounded-pill ">
+                                <a href="{{ auth()->user()->id === 1 ? '/admin' : '/nasabah' }}" class="btn btn-success btn-lg px-4 py-2 fw-bold rounded-pill ">
                                     Dashboard
                                 </a>
                             </div>
@@ -170,45 +170,44 @@
     </section>
 
     <!-- Alamat & Jam Layanan -->
-    <section class="section-py">
+    <section class="mt-5">
         <div class="container">
-            <div class="row g-4 align-items-start">
-                <div class="col-lg-7">
-                    <h2 class="fw-bold display-6 text-brand mb-3">Alamat & Layanan Desa</h2>
-                    <p class="text-muted mb-4">Balai Desa Tanggulun, Kec. Kadungora, Kab. Garut</p>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="p-3 border rounded-4 card-clean h-100">
-                                <h5 class="mb-1">Jadwal Setor</h5>
-                                <p class="mb-0 text-muted">Senin–Sabtu, 08.00–15.00 WIB</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 border rounded-4 card-clean h-100">
-                                <h5 class="mb-1">Layanan Jemput</h5>
-                                <p class="mb-0 text-muted">Reservasi H-1 via portal / petugas desa</p>
-                            </div>
+            <div class="">
+                <h2 class="fw-bold display-6 text-brand text-center">Alamat Desa</h2>
+                <p class="text-muted mb-4 text-center">Balai Desa Tanggulun, Kp. Tanggulun, RT. 02 RW.
+01, Kec. Kadungora, Kab. Garut</p>
+                {{-- <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded-4 card-clean h-100">
+                            <h5 class="mb-1">Jadwal Setor</h5>
+                            <p class="mb-0 text-muted">Senin–Sabtu, 08.00–15.00 WIB</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="p-4 border rounded-4 card-clean">
-                        <h5 class="mb-3">Kontak Cepat</h5>
-                        <ul class="list-unstyled mb-0 text-muted">
-                            <li class="mb-2"><i class="bi bi-telephone me-2"></i> Kantor Desa: (0262) ———</li>
-                            <li class="mb-2"><i class="bi bi-whatsapp me-2"></i> Admin Bank Sampah: 08xx-xxxx-xxxx
-                            </li>
-                            <li class=""><i class="bi bi-envelope me-2"></i> Email: banksampah@tanggulun.desa.id
-                            </li>
-                        </ul>
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded-4 card-clean h-100">
+                            <h5 class="mb-1">Layanan Jemput</h5>
+                            <p class="mb-0 text-muted">Reservasi H-1 via portal / petugas desa</p>
+                        </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
+            {{-- <div class="">
+                <div class="p-4 border rounded-4 card-clean">
+                    <h5 class="mb-3">Kontak Cepat</h5>
+                    <ul class="list-unstyled mb-0 text-muted">
+                        <li class="mb-2"><i class="bi bi-telephone me-2"></i> Kantor Desa: (0262) ———</li>
+                        <li class="mb-2"><i class="bi bi-whatsapp me-2"></i> Admin Bank Sampah: 08xx-xxxx-xxxx
+                        </li>
+                        <li class=""><i class="bi bi-envelope me-2"></i> Email: banksampah@tanggulun.desa.id
+                        </li>
+                    </ul>
+                </div>
+            </div> --}}
         </div>
     </section>
 
     <!-- Testimonials -->
-    <section class="section-py bg-brand-soft">
+    {{-- <section class="section-py bg-brand-soft">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="fw-bold display-6 text-brand">Apa Kata Warga?</h2>
@@ -262,7 +261,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- CTA Section -->
     @guest
