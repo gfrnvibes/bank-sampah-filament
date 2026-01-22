@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             WasteTypeSeeder::class,
-            // WasteAndBalanceSeeder::class,
-            // WasteSaleSeeder::class,
-            // WasteDepositSeeder::class,
+            WasteAndBalanceSeeder::class,
+            WasteSaleSeeder::class,
+            WasteDepositSeeder::class,
         ]);
     }
 

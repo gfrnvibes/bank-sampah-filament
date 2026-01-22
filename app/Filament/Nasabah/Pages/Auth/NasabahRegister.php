@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\FileUpload;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class NasabahRegister extends Register
 {
@@ -27,7 +29,11 @@ class NasabahRegister extends Register
                     ->mask('9999999999999999')
                     ->unique(ignoreRecord: true)
                     ->extraInputAttributes(['inputmode' => 'numeric']) // biar keyboard HP muncul angka semua
-                    ->maxLength(16),
+                    ->maxLength(16)
+                    ->minLength(16)
+                    ->validationMessages([
+                        'regex' => 'NIK harus terdiri dari 16 digit angka.',
+                    ]),
 
                 $this->getEmailFormComponent(),
                 $this->getPasswordFormComponent(),
@@ -46,6 +52,9 @@ class NasabahRegister extends Register
     protected function handleRegistration(array $data): Model
     {
         $user = User::create($data);
+
+        // Authenticate user setelah registrasi
+        // Auth::login($user);
 
         // Ambil admin default id 1
         $admin = User::find(1);
@@ -70,4 +79,10 @@ class NasabahRegister extends Register
 
         return $user;
     }
+
+    // protected function getRedirectUrl(): string
+    // {
+    //     // Mengarahkan user ke URL utama panel 'nasabah'
+    //     return filament()->getPanel('nasabah')->getUrl();
+    // }
 }

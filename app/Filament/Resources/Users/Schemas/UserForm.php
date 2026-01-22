@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Users\Schemas;
 
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\TextInput;
@@ -31,14 +32,13 @@ class UserForm
                             TextInput::make('nik')
                                     ->label('NIK')
                                     ->required()
-                                    ->numeric()
-                                    ->string()
-                                    ->rule('string')
+                                    ->regex('/^\d+$/')
                                     ->rule('digits:16')
                                     ->unique('users', 'nik', ignoreRecord: true)
                                     ->validationMessages([
                                         'unique' => 'NIK ini sudah terdaftar.',
                                         'digits' => 'NIK harus terdiri dari 16 digit.',
+                                        'regex' => 'NIK hanya boleh berisi angka.',
                                     ]),
     
                             TextInput::make('phone')
@@ -50,6 +50,8 @@ class UserForm
                                     ->unique('users', 'phone', ignoreRecord: true)
                                     ->validationMessages([
                                         'unique' => 'No. Telepon ini sudah terdaftar.',
+                                        'minLength' => 'No. Telepon minimal terdiri dari 10 digit.',
+                                        'maxLength' => 'No. Telepon maksimal terdiri dari 13 digit.',
                                     ]),
                         ]),
 
@@ -87,15 +89,20 @@ class UserForm
                         // Password tetap menampilkan nilai lama
                         TextInput::make('password')
                             ->password()
+                            ->nullable()
                             ->dehydrateStateUsing(
                                 fn($state, $record) =>
                                 $state ? bcrypt($state) : $record->password
                             )
                             ->required(fn($record) => $record === null),
 
-                        // Toggle::make('is_active')
-                        //         ->label('Status Akun')
-                        //         ->required(),
+                        Toggle::make('is_active')
+                                ->label('Verifikasi')
+                                ->onIcon(Heroicon::Bolt)
+                                ->offIcon(Heroicon::User)
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->required(),
 
                         FileUpload::make('avatar')
                             ->image() // WAJIB untuk preview

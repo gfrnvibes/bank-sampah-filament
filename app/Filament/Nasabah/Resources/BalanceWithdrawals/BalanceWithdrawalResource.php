@@ -142,7 +142,11 @@ class BalanceWithdrawalResource extends Resource
                     ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
                     ->badge()
                     ->size('xxl')
-                    ->summarize(Sum::make()->money('IDR', decimalPlaces: 0, locale: 'id_ID'))
+                    // ->summarize(
+                    //     Sum::make()
+                    //     ->query(fn (Builder $query) => $query->where('status', 'completed')
+                    //     ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
+                    //     ))
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge()
@@ -166,8 +170,8 @@ class BalanceWithdrawalResource extends Resource
                         'accepted' => 'primary',
                         'rejected' => 'danger',
                         'completed' => 'success',
-                    }),
-            ])
+                    })
+                ])
             ->filters([
                 Filter::make('advanced')
                     ->schema([

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('age')->nullable();
             $table->decimal('balance', 15, 2)->default(0);
             $table->string('foto_ktp')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active')->default(false);
             $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

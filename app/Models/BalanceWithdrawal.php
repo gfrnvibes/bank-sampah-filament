@@ -9,7 +9,7 @@ class BalanceWithdrawal extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'amount', 'status'];
+    protected $fillable = ['user_id', 'amount', 'status', 'receipt'];
 
     protected $casts = [
         'amount' => 'decimal:2',

@@ -11,6 +11,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ColumnGroup;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\TrashedFilter;
@@ -68,6 +69,9 @@ class WasteSalesTable
                 ->label('Catatan')
                 ->default('-')
                 ->toggleable(),
+            ImageColumn::make('receipt')
+                    ->label('Bukti Transaksi')
+                    ->toggleable(),
             TextColumn::make('updated_at')
                 ->dateTime()
                 ->sortable()

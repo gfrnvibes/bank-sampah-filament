@@ -10,6 +10,7 @@ use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater\TableColumn;
 
 class WasteDepositForm
@@ -21,7 +22,7 @@ class WasteDepositForm
                 // --- BAGIAN HEADER (TOTAL) ---
                 Grid::make(3)->schema([
                     Select::make('user_id')
-                        ->options(User::query()->where('id', '!=', 1)->pluck('name', 'id'))
+                        ->options(User::query()->where('id', '!=', 1)->where('is_active', true)->pluck('name', 'id'))
                         ->label('Pilih Nasabah')
                         ->required()
                         ->searchable()
@@ -118,9 +119,13 @@ class WasteDepositForm
                     ])
                     ->reorderable(false),
 
-                Textarea::make('notes')
-                    ->label('Catatan')
-                    ->columnSpanFull(),
+                Grid::make(2)->schema([
+                    FileUpload::make('receipt')
+                            ->label('Bukti Transaksi')
+                            ->image(),
+                    Textarea::make('notes')
+                        ->label('Catatan'),
+                ])
             ])->columns(1);
     }
 

@@ -15,7 +15,7 @@ class WasteDeposit extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'total_weight', 'total_amount', 'notes', 'hidden_by_admin', 'hidden_by_user'];
+    protected $fillable = ['user_id', 'total_weight', 'total_amount', 'notes', 'receipt', 'hidden_by_admin', 'hidden_by_user'];
 
     protected $casts = [
         'total_weight' => 'float',

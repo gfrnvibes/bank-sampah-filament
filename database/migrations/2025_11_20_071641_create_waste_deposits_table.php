@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->boolean('hidden_by_user')->default(false);
             $table->boolean('hidden_by_admin')->default(false);
+            $table->string('receipt');
             $table->softDeletes();
             $table->timestamps();
         });

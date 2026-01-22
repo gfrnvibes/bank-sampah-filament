@@ -10,6 +10,7 @@ use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater\TableColumn;
 
 class WasteSaleForm
@@ -116,10 +117,14 @@ class WasteSaleForm
                     TextInput::make('buyer')
                         ->label('Pembeli')
                         ->required(),
-                    
-                Textarea::make('notes')
-                    ->label('Catatan')
-                    ->columnSpanFull(),
+                ]),
+
+                Grid::make(2)->schema([
+                    FileUpload::make('receipt')
+                            ->label('Bukti Transaksi')
+                            ->image(),
+                    Textarea::make('notes')
+                        ->label('Catatan'),
                 ])
             ])->columns(1);
     }

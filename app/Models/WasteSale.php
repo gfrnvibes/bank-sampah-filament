@@ -12,6 +12,7 @@ class WasteSale extends Model
         'total_income',
         'buyer',
         'notes',
+        'receipt',
     ];
 
     protected $casts = [

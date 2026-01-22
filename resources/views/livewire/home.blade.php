@@ -13,10 +13,10 @@
         <div class="container">
             <div class="row align-items-center">
                 <!-- Kiri - Hero Content -->
-                <div class="col-lg-8 mb-4 mb-lg-0">
-                    <div class="p-4 p-lg-5 rounded-4 shadow-sm hero-card">
-                        <h1 class="display-5 fw-bold mb-3 text-brand">Bank Sampah Digital Desa Tanggulun</h1>
-                        <p class="lead mb-4 section-subtitle">
+                <div class="">
+                    <div class="p-4 p-lg-5">
+                        <h1 class="display-5 fw-bold mb-3 text-center">Bank Sampah Digital Desa Tanggulun</h1>
+                        <p class="lead mb-4 section-subtitle text-center">
                             Ubah sampah jadi berkah. Sistem terintegrasi, transparan, dan ramah warga Tanggulun.
                         </p>
                         @guest
@@ -25,45 +25,14 @@
                             </a>
                         @endguest
                         @auth
-                            <a href="/nasabah" class="btn btn-brand btn-lg px-4 py-2 fw-bold rounded-pill">
+                        <div class="text-center">
+                            <a href="/nasabah" class="btn btn-success btn-lg px-4 py-2 fw-bold rounded-pill ">
                                 Dashboard
                             </a>
+                        </div>
                         @endauth
                     </div>
                 </div>
-
-                <!-- Kanan - Info Saldo -->
-                {{-- <div class="col-lg-4">
-                    @auth
-                        <div class="card card-clean border-0 shadow-sm mb-3 rounded-4">
-                            <div class="card-body d-flex justify-content-between align-items-center p-4">
-                                <div>
-                                    <span class="text-secondary">Saldo</span>
-                                    <h4 class="fw-bold mb-0">Rp{{ number_format($userBalance, 0, ',', '.') }}</h4>
-                                </div>
-                                <div>
-                                    <button class="btn btn-brand fw-bold" data-bs-toggle="modal"
-                                        data-bs-target="#tarikModal" @if ($userBalance <= 0) disabled @endif>
-                                        Tarik Saldo
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-clean border-0 shadow-sm rounded-4">
-                            <div class="card-body p-4 d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="text-secondary">Sampah Terkumpul</span>
-                                    <h5 class="fw-bold mb-0">
-                                        {{ number_format(auth()->user()->wasteDeposits->where('status', 'completed')->sum('total_weight'), 1) }} Kg
-                                    </h5>
-                                </div>
-                                <div>
-                                    <a href="{{ route('setor-sampah') }}" class="btn btn-outline-success fw-bold">Setor</a>
-                                </div>
-                            </div>
-                        </div>
-                    @endauth
-                </div> --}}
             </div>
         </div>
     </section>
@@ -167,16 +136,16 @@
             <div class="row text-center">
                 <div class="col-6 col-md-4 mb-4 mb-md-0">
                     <div class="display-6 fw-bold">
-                        {{ App\Models\User::where('id', '!=', 1)->count() }}
+                        {{ App\Models\User::where('id', '!=', 1)->where('is_active', true)->count() }}
                     </div>
-                    <p class="mb-0">Anggota</p>
+                    <p class="mb-0">Nasabah Aktif</p>
                 </div>
                 <div class="col-6 col-md-4 mb-4 mb-md-0">
                     <div class="display-6 fw-bold">
                         {{-- format number to 2 decimal places --}}
-                        {{ number_format(App\Models\WasteDeposit::sum('total_weight'), 0) }}
+                        {{ number_format(App\Models\WasteDeposit::sum('total_weight'), 0) }} Kg
                     </div>
-                    <p class="mb-0">Kilo Sampah</p>
+                    <p class="mb-0">Sampah Terkumpul</p>
                 </div>
                 <div class="col-6 col-md-4 mb-4 mb-md-0">
                     <div class="display-6 fw-bold">
@@ -286,21 +255,23 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="section-py">
-        <div class="container text-center">
-            <h2 class="fw-bold display-6 text-brand mb-3">Waktunya Gabung, Warga Tanggulun!</h2>
-            <p class="lead section-subtitle mb-5">Mulai pilah sekarang, rasakan manfaatnya.</p>
-            {{-- <div class="d-flex justify-content-center gap-3">
-                @guest
-                    <a href="{{ route('register') }}" class="btn btn-brand btn-lg px-4 py-2 fw-bold rounded-pill">Daftar</a>
-                    <a href="{{ route('login') }}" class="btn btn-outline-success btn-lg px-4 py-2 fw-bold rounded-pill">Masuk</a>
-                @endguest
-                @auth
-                    <a href="{{ route('setor-sampah') }}" class="btn btn-brand btn-lg px-4 py-2 fw-bold rounded-pill">Setor Sampah</a>
-                @endauth
-            </div> --}}
-        </div>
-    </section>
+    @guest
+        <section class="section-py">
+            <div class="container text-center">
+                <h2 class="fw-bold display-6 text-brand mb-3">Waktunya Gabung, Warga Tanggulun!</h2>
+                <p class="lead section-subtitle mb-5">Mulai pilah sekarang, rasakan manfaatnya.</p>
+                {{-- <div class="d-flex justify-content-center gap-3">
+                    @guest
+                        <a href="{{ route('register') }}" class="btn btn-brand btn-lg px-4 py-2 fw-bold rounded-pill">Daftar</a>
+                        <a href="{{ route('login') }}" class="btn btn-outline-success btn-lg px-4 py-2 fw-bold rounded-pill">Masuk</a>
+                    @endguest
+                    @auth
+                        <a href="{{ route('setor-sampah') }}" class="btn btn-brand btn-lg px-4 py-2 fw-bold rounded-pill">Setor Sampah</a>
+                    @endauth
+                </div> --}}
+            </div>
+        </section>
+    @endguest
 
     <script>
         document.addEventListener('livewire:init', () => {

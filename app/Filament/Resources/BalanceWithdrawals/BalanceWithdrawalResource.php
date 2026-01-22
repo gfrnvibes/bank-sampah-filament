@@ -2,35 +2,38 @@
 
 namespace App\Filament\Resources\BalanceWithdrawals;
 
-use App\Filament\Resources\BalanceWithdrawals\Pages\ManageBalanceWithdrawals;
-use App\Filament\Resources\BalanceWithdrawals\Widgets\LatestBalanceWithdrawal;
-use App\Filament\Widgets\LatestBalanceWithdrawals;
-use App\Models\BalanceWithdrawal;
-use App\Models\TransactionHistory;
-use App\Models\User;
+use UnitEnum;
 use BackedEnum;
+use App\Models\User;
+use Filament\Tables\Table;
 use Filament\Actions\Action;
-use Filament\Actions\ActionGroup;
+use Filament\Schemas\Schema;
 use Filament\Actions\BulkAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Enums\FiltersLayout;
+use App\Models\BalanceWithdrawal;
+use Filament\Actions\ActionGroup;
+use App\Models\TransactionHistory;
+use Filament\Actions\DeleteAction;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Table;
+use Filament\Forms\Components\Radio;
+use Filament\Support\Icons\Heroicon;
+use Filament\Actions\BulkActionGroup;
+use Filament\Forms\Components\Select;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
-use UnitEnum;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
+use App\Filament\Widgets\LatestBalanceWithdrawals;
+use App\Filament\Resources\BalanceWithdrawals\Pages\ManageBalanceWithdrawals;
+use App\Filament\Resources\BalanceWithdrawals\Widgets\LatestBalanceWithdrawal;
 
 class BalanceWithdrawalResource extends Resource
 {
@@ -53,7 +56,7 @@ class BalanceWithdrawalResource extends Resource
         return $schema
             ->components([
                 Select::make('user_id')
-                    ->options(User::query()->where('id', '!=', 1)->pluck('name', 'id'))
+                    ->options(User::query()->where('id', '!=', 1)->where('is_active', true)->pluck('name', 'id'))
                     ->label('Pilih Nasabah')
                     ->required()
                     ->searchable()
@@ -95,7 +98,13 @@ class BalanceWithdrawalResource extends Resource
                         'completed' => 'Tunai telah diberikan kepada nasabah',
                     ])
                     ->default('completed')
-                    ->required(),
+                    ->required()
+                    ->live(),
+                FileUpload::make('receipt')
+                    ->label('Bukti Setoran')
+                    ->image()
+                    ->visible(fn($get) => $get('status') === 'completed')
+                    ->required(fn($get) => $get('status') === 'completed'),
             ])->columns(1);
     }
 
@@ -139,6 +148,8 @@ class BalanceWithdrawalResource extends Resource
                 TextEntry::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime(),
+                ImageEntry::make('receipt')
+                    ->label('Bukti Penarikan'),
                 // TextEntry::make('updated_at')
                 //     ->label('Diperbarui Pada')
                 //     ->dateTime(),
@@ -188,6 +199,9 @@ class BalanceWithdrawalResource extends Resource
                         'completed' => 'heroicon-s-check-badge',
                         default => null,
                     }),
+                ImageColumn::make('receipt')
+                    ->label('Bukti Transaksi')
+                    ->toggleable(),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()

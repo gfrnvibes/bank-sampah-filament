@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources\WasteSales\Schemas;
 
-use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
 
 class WasteSaleInfolist
 {
@@ -54,6 +55,9 @@ class WasteSaleInfolist
 
                 TextEntry::make('updated_at')
                     ->label('Diperbarui pada'),
+
+                    ImageEntry::make('receipt')
+                    ->label('Bukti Transaksi'),
             ]);
     }
 }

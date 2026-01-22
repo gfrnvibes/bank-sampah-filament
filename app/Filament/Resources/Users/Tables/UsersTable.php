@@ -68,6 +68,11 @@ class UsersTable
                     ->suffix(' Tahun')
                     ->searchable()
                     ->toggleable(),
+                IconColumn::make('is_active')
+                    ->label('Verifikasi')
+                    ->boolean()
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime()

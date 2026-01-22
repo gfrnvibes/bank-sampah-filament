@@ -115,10 +115,11 @@ class LaporanTransaksi extends Component implements HasForms, HasTable, HasActio
             ])
             ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
+                    // DeleteBulkAction::make(),
+                    // ForceDeleteBulkAction::make(),
+                    // RestoreBulkAction::make(),
                     FilamentExportBulkAction::make('export')
+                        ->label('Expor yang dipilih')
                         ->disableAdditionalColumns(),
                 ]),
             ]);

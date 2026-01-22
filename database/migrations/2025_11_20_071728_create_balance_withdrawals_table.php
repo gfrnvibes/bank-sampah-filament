@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'accepted', 'rejected', 'completed'])->default('pending');
             $table->boolean('hidden_by_user')->default(false);
             $table->boolean('hidden_by_admin')->default(false);
+            $table->string('receipt')->nullable(); // Bukti penarikan
             $table->timestamps();
         });
     }

@@ -31,11 +31,11 @@ class NasabahLogin extends Login
             ->extraInputAttributes(['tabindex' => 1]);
     }
 
-    protected function getRedirectUrl(): string
-    {
-        // Mengarahkan user ke URL utama panel 'nasabah'
-        return filament()->getPanel('nasabah')->getUrl();
-    }
+    // protected function getRedirectUrl(): string
+    // {
+    //     // Mengarahkan user ke URL utama panel 'nasabah'
+    //     return filament()->getPanel('nasabah')->getUrl();
+    // }
 
     protected function getCredentialsFromFormData(array $data): array
     {
