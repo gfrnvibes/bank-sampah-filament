@@ -39,6 +39,7 @@ class NasabahPanelProvider extends PanelProvider
             ->path('nasabah')
             ->login(NasabahLogin::class)
             ->registration(NasabahRegister::class)
+            ->emailVerification()
             ->colors([
                 'primary' => Color::Green,
             ])
@@ -46,7 +47,7 @@ class NasabahPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->spa()
             ->maxContentWidth(Width::FiveExtraLarge)
-            // ->profile(EditProfile::class, false)
+            // ->profile()
             ->discoverResources(in: app_path('Filament/Nasabah/Resources'), for: 'App\Filament\Nasabah\Resources')
             ->discoverPages(in: app_path('Filament/Nasabah/Pages'), for: 'App\Filament\Nasabah\Pages')
             ->pages([

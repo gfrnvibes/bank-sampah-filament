@@ -53,6 +53,8 @@ class NasabahRegister extends Register
     {
         $user = User::create($data);
 
+        event(new Registered($user));
+
         // Authenticate user setelah registrasi
         Auth::login($user);
 

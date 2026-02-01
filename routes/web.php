@@ -3,6 +3,8 @@
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Livewire\Panduan;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 
 // Route::get('/', function () {
@@ -25,3 +27,18 @@ Route::get('panduan', Panduan::class)->name('panduan');
 Route::get('admin-login', \App\Filament\Pages\Auth\AdminLogin::class)->name('admin.login');
 Route::get('nasabah-login', \App\Filament\Nasabah\Pages\Auth\NasabahLogin::class)->name('nasabah.login');
 Route::get('nasabah-register', \App\Filament\Nasabah\Pages\Auth\NasabahRegister::class)->name('nasabah.register');
+
+// Filament Nasabah Email Verification Routes
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('filament/nasabah/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//         $request->fulfill();
+
+//         return redirect()->intended('/nasabah');
+//     })->middleware('signed')->name('filament.nasabah.auth.email-verification.verify');
+
+//     Route::post('filament/nasabah/email/verification-notification', function (Request $request) {
+//         $request->user()->sendEmailVerificationNotification();
+
+//         return back()->with('status', 'verification-link-sent');
+//     })->name('filament.nasabah.auth.email-verification.send');
+// });
