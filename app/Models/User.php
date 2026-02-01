@@ -75,24 +75,40 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 
     public function canAccessPanel(Panel $panel): bool
     {
+        // Admin (ID 1) selalu punya akses tanpa cek verifikasi
+        if ($this->id === 1) {
+            return true;
+        }
+
+        // Nasabah harus cek domain gmail
         return str_ends_with($this->email, '@gmail.com');
-        // return true;
     }
+
+    public function hasVerifiedEmail(): bool
+{
+    // Jika user adalah admin, anggap sudah verifikasi (return true)
+    if ($this->id === 1) {
+        return true;
+    }
+
+    // Untuk user lain, gunakan pengecekan standar Laravel (cek kolom email_verified_at)
+    return $this->getEmailForVerification() && $this->email_verified_at !== null;
+}
 
     public function sendEmailVerificationNotification(): void
     {
-        // Membuat URL verifikasi khusus untuk rute Filament Nasabah
-        $verifyUrl = URL::temporarySignedRoute(
-            'filament.nasabah.auth.email-verification.verify', // Nama rute panel nasabah
-            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
-            [
-                'id' => $this->getKey(),
-                'hash' => sha1($this->getEmailForVerification()),
-            ],
-        );
+        // Jika ID adalah 1, jangan kirim email verifikasi
+        if ($this->id === 1) {
+            return;
+        }
 
-        // Kirim menggunakan notifikasi bawaan Laravel namun dengan URL buatan kita
-        $notification = new VerifyEmail();
+        // Kode verifikasi untuk user lain (Nasabah)
+        $verifyUrl = URL::temporarySignedRoute('filament.nasabah.auth.email-verification.verify', now()->addMinutes(60), [
+            'id' => $this->getKey(),
+            'hash' => sha1($this->getEmailForVerification()),
+        ]);
+
+        $notification = new \Illuminate\Auth\Notifications\VerifyEmail();
         $notification->createUrlUsing(fn() => $verifyUrl);
 
         $this->notify($notification);
