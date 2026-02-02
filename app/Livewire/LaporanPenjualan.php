@@ -2,31 +2,32 @@
 
 namespace App\Livewire;
 
+use Livewire\Component;
+use App\Models\WasteSale;
+use Filament\Tables\Table;
+use App\Models\WasteDeposit;
+use Filament\Actions\CreateAction;
+use Filament\Tables\Filters\Filter;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Contracts\HasTable;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Columns\ColumnGroup;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Actions\Concerns\InteractsWithActions;
+use App\Filament\Resources\WasteSales\WasteSaleResource;
+use App\Filament\Resources\WasteDeposits\WasteDepositResource;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
-use App\Filament\Resources\WasteDeposits\WasteDepositResource;
-use App\Filament\Resources\WasteSales\WasteSaleResource;
-use App\Models\WasteDeposit;
-use App\Models\WasteSale;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Actions\CreateAction;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\RestoreBulkAction;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Tables\Columns\ColumnGroup;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\TrashedFilter;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Livewire\Component;
 
 class LaporanPenjualan extends Component implements HasForms, HasTable, HasActions
 {
@@ -49,22 +50,30 @@ class LaporanPenjualan extends Component implements HasForms, HasTable, HasActio
                     TextColumn::make('items.wasteType.name')
                         ->label('Nama')
                         ->bulleted()
-                        ->limitList(3)
-                        ->searchable()
-                        ->expandableLimitedList(),
+                        ->searchable(),
                     TextColumn::make('items.weight_kg')
                         ->label('Berat')
-                        ->suffix(' Kg')
                         ->bulleted()
-                        ->limitList(3)
-                        ->formatStateUsing(fn ($state) => number_format($state, 1, ',', '.'))
-                        ->expandableLimitedList(),
+                        ->formatStateUsing(function ($state) {
+                            // Sekarang formatStateUsing akan menerima array hasil dari getStateUsing
+                            if (is_array($state)) {
+                                return collect($state)->map(fn ($value) => 
+                                    number_format((float) $value, 1, ',', '.') . ' Kg'
+                                );
+                            }
+                            
+                            return number_format((float) $state, 1, ',', '.') . ' Kg';
+                    }),
                     TextColumn::make('items.subtotal')
                         ->label('Subtotal')
-                        ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
                         ->bulleted()
-                        ->limitList(3)
-                        ->expandableLimitedList(),
+                        ->formatStateUsing(function ($state) {
+                            // Jika $state ternyata masih array, ambil nilai pertamanya
+                            // Ini mencegah error "array given" pada number_format
+                            $value = is_array($state) ? ($state[0] ?? 0) : $state;
+
+                            return 'Rp ' . number_format((float) $value, 0, ',', '.');
+                        }),
                 ]),
             TextColumn::make('total_weight')
                 ->label('Total Berat')
@@ -115,7 +124,10 @@ class LaporanPenjualan extends Component implements HasForms, HasTable, HasActio
             ])
             ->headerActions([
                 FilamentExportHeaderAction::make('export')
-                    ->disableAdditionalColumns(),
+                    ->disableAdditionalColumns()
+                    ->formatStates([
+                        'name' => fn (?Model $record) => strtoupper($record->name),
+                    ]),
                 // CreateAction::make()
                 //     ->mutateFormDataUsing(fn(array $data): array => WasteDeposit::mutateFormDataBeforeCreate($data))
                 //     ->visible(url()->current() != WasteDepositResource::getUrl('index')),

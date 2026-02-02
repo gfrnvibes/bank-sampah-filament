@@ -13,10 +13,12 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Actions\Contracts\HasActions;
+use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -51,22 +53,35 @@ class LaporanPenyetoran extends Component implements HasForms, HasTable, HasActi
                     TextColumn::make('items.wasteType.name')
                         ->label('Nama')
                         ->bulleted()
-                        ->limitList(3)
-                        ->searchable()
-                        ->expandableLimitedList(),
+                        ->searchable(),
                     TextColumn::make('items.weight_kg')
                         ->label('Berat')
-                        ->suffix(' Kg')
                         ->bulleted()
-                        ->limitList(3)
-                        ->formatStateUsing(fn ($state) => number_format($state, 1, ',', '.'))
-                        ->expandableLimitedList(),
-                    // TextColumn::make('items.subtotal')
-                    //     ->label('Subtotal')
-                    //     ->money('IDR', decimalPlaces: 0, locale: 'id_ID')
-                    //     ->bulleted()
-                    //     ->limitList(3)
-                    //     ->expandableLimitedList(),
+                        ->getStateUsing(function ($record) {
+                            // Ambil data langsung dari relationship model
+                            // Ini memastikan kita mendapatkan Collection/Array, bukan JSON string
+                            return $record->items->pluck('weight_kg')->toArray();
+                        })
+                        ->formatStateUsing(function ($state) {
+                            // Sekarang formatStateUsing akan menerima array hasil dari getStateUsing
+                            if (is_array($state)) {
+                                return collect($state)->map(fn ($value) => 
+                                    number_format((float) $value, 1, ',', '.') . ' Kg'
+                                );
+                            }
+                            
+                            return number_format((float) $state, 1, ',', '.') . ' Kg';
+                        }),
+                TextColumn::make('items.subtotal')
+                    ->label('Subtotal')
+                    ->bulleted()
+                    ->formatStateUsing(function ($state) {
+                        // Jika $state ternyata masih array, ambil nilai pertamanya
+                        // Ini mencegah error "array given" pada number_format
+                        $value = is_array($state) ? ($state[0] ?? 0) : $state;
+
+                        return 'Rp ' . number_format((float) $value, 0, ',', '.');
+                    }),
                 ]),
                 TextColumn::make('total_weight')
                     ->label('Total Berat')
@@ -113,24 +128,46 @@ class LaporanPenyetoran extends Component implements HasForms, HasTable, HasActi
                             );
                     }),
             ])
-            ->actions([
+            ->recordActions([
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\ViewAction::make()->url(fn (Milestone $record) => MilestoneResource::getUrl('view', ['record' => $record->id]))
 
             ])
             ->headerActions([
-                FilamentExportHeaderAction::make('export')
-                    ->disableAdditionalColumns()
-                    ->extraViewData(fn($action) => [
-                        'total_weight' => $action->getRecords()->sum('total_weight'),
-                        'total_amount' => $action->getRecords()->sum('total_amount')
-                    ]),
+                    FilamentExportHeaderAction::make('export')
+    ->disableAdditionalColumns()
+    // ->formatStates([
+    //     'waste_names' => function ($state, $record) {
+    //         if (!$record) return '';
+            
+    //         return $record->items->map(function ($item) {
+    //             return '• ' . ($item->wasteType?->name ?? '-');
+    //         })->implode("\n"); // Menggunakan \n
+    //     },
+
+    //     'weights' => function ($state, $record) {
+    //         if (!$record) return '';
+
+    //         return $record->items->map(function ($item) {
+    //             return '• ' . number_format((float) $item->weight_kg, 1, ',', '.') . ' Kg';
+    //         })->implode("\n");
+    //     },
+
+    //     'subtotals' => function ($state, $record) {
+    //         if (!$record) return '';
+
+    //         return $record->items->map(function ($item) {
+    //             return '• Rp ' . number_format((float) $item->subtotal, 0, ',', '.');
+    //         })->implode("\n");
+    //     },
+    // ])
+
                 // CreateAction::make()
                 //     ->mutateFormDataUsing(fn(array $data): array => WasteDeposit::mutateFormDataBeforeCreate($data))
                 //     ->visible(url()->current() != WasteDepositResource::getUrl('index')),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     // DeleteBulkAction::make(),
                     // ForceDeleteBulkAction::make(),
