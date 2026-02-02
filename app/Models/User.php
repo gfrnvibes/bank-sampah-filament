@@ -97,16 +97,17 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 
     public function sendEmailVerificationNotification(): void
     {
-        // Jika ID adalah 1, jangan kirim email verifikasi
+        // Jika ID adalah 1 (admin), jangan kirim email verifikasi
         if ($this->id === 1) {
             return;
         }
 
-        // Kode verifikasi untuk user lain (Nasabah)
-        $verifyUrl = URL::temporarySignedRoute('filament.nasabah.auth.email-verification.verify', now()->addMinutes(60), [
-            'id' => $this->getKey(),
-            'hash' => sha1($this->getEmailForVerification()),
-        ]);
+        // Untuk nasabah saja
+        $verifyUrl = URL::temporarySignedRoute(
+            'filament.nasabah.auth.email-verification.verify',
+            now()->addMinutes(60),
+            ['id' => $this->getKey(), 'hash' => sha1($this->getEmailForVerification())]
+        );
 
         $notification = new \Illuminate\Auth\Notifications\VerifyEmail();
         $notification->createUrlUsing(fn() => $verifyUrl);

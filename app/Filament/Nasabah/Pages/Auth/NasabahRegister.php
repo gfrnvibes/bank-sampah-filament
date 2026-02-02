@@ -56,7 +56,7 @@ class NasabahRegister extends Register
         event(new Registered($user));
 
         // Authenticate user setelah registrasi
-        Auth::login($user);
+        // Auth::login($user);
 
         // Ambil admin default id 1
         $admin = User::find(1);
@@ -82,9 +82,9 @@ class NasabahRegister extends Register
         return $user;
     }
 
-    protected function getRedirectUrl(): string
-    {
+    // protected function getRedirectUrl(): string
+    // {
         // Mengarahkan user ke URL utama panel 'nasabah'
-        return filament()->getPanel('nasabah')->getUrl();
-    }
+    //     return filament()->getPanel('nasabah')->getUrl();
+    // }
 }
